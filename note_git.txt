@@ -1,0 +1,22 @@
+
+Đăng nhập tài khoản:
+Kiểm tra tài khoản:
+git config user.name
+git config user.email
+Lưu ý: hãy kiểm tra đúng folder đang kết nối;
++Clone repo về:
+git clone https://github.com/LN2610/PBL3.git
++ Khi đã clone, sau này làm việc, việc đầu tiên là kiểm tra xem có đang kết nối với git repo hay không:
+git remote --v
+(Sẽ có dạng đường link của git đó)
+
++ Sau khi kiểm tra, dùng: git pull để pull các thay đổi từ kho git về.
++ Sau khi pull thì làm việc trên folder đó;
++ Làm việc, muốn lưu thay đổi đó thì dùng lần lượt các lệnh sau:
+git add "Tên foler hoặc file" (ví dụ: git add login) thêm folder login;
+git commit -m "Thông điệp" ( Ví dụ: git commit -m "add_newFolder login")
+git push ( để push thay đổi lên git)
++ kiểm tra trạng thái(đang có cái nào đang được commit): git status
++ kiểm tra các hoạt động gần đây:
+git log 
+hoặc git log --oneline (cũng là git log nhưng trên 1 dòng, gọn hơn)
