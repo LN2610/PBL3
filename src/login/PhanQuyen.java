@@ -1,30 +1,46 @@
 package login;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PhanQuyen extends JFrame implements ActionListener {
-
+	
+	private JPanel contentPane;
     private JButton adminButton;
     private JButton employeeButton;
     private JButton exit;
-    private DangNhap dangNhapWindow; 
+    private dangnhap1 dangNhapWindow; 
     private boolean isAdmin;
 
     public PhanQuyen() {
-        setTitle("Chọn Vai Trò");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 150);
-        setLayout(new FlowLayout());
-        
-        adminButton = new JButton("Admin");
-        employeeButton = new JButton("Nhân Viên");
-        exit = new JButton ("Thoát");
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 780, 415);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        add(adminButton);
-        add(employeeButton);
-        add(exit);
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		adminButton = new JButton("Admin");
+		adminButton.setForeground(new Color(128, 0, 0));
+		adminButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		adminButton.setBounds(92, 56, 197, 87);
+		contentPane.add(adminButton);
+		
+		employeeButton = new JButton("Employee");
+		employeeButton.setForeground(new Color(128, 0, 0));
+		employeeButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		employeeButton.setBounds(440, 56, 197, 87);
+		contentPane.add(employeeButton);
+		
+		exit = new JButton("Exit");
+		exit.setForeground(new Color(128, 0, 0));
+		exit.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		exit.setBounds(254, 225, 197, 87);
+		contentPane.add(exit);
         
        
         adminButton.addActionListener(this);
@@ -40,11 +56,11 @@ public class PhanQuyen extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == adminButton) {
             isAdmin = true;
-            dangNhapWindow = new DangNhap(isAdmin);
+            dangNhapWindow = new dangnhap1(isAdmin);
             dispose(); //
         } else if (e.getSource() == employeeButton) {
             isAdmin = false;
-            dangNhapWindow = new DangNhap(isAdmin); 
+            dangNhapWindow = new dangnhap1(isAdmin); 
             dispose(); 
         }
         else if (e.getSource() == exit)
