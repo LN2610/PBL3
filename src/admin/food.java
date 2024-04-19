@@ -91,13 +91,67 @@ public class food extends JPanel implements ActionListener{
                 int quantity = Integer.parseInt(quantityField.getText());
                 
                 try {
-					Food_Cache.addFoodToDatabase(id, name, price, quantity);
 					Food_Cache.addFood(id, name, price, quantity);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(null, "Lỗi khi thêm món mới vào cơ sở dữ liệu: " + e1.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
 				    //e1.printStackTrace();
 				}
                 updateTable();
+            }
+        }
+        else if (e.getSource() == btnSua) {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) { // Kiểm tra xem có dòng nào được chọn không
+                int id = (int) table.getValueAt(selectedRow, 0);
+                String name = (String) table.getValueAt(selectedRow, 1);
+                int price = (int) table.getValueAt(selectedRow, 2);
+                int quantity = (int) table.getValueAt(selectedRow, 3);
+
+                JTextField idField = new JTextField(String.valueOf(id));
+                JTextField nameField = new JTextField(name);
+                JTextField priceField = new JTextField(String.valueOf(price));
+                JTextField quantityField = new JTextField(String.valueOf(quantity));
+
+                Object[] fields = {
+                    "ID:", idField,
+                    "Tên món:", nameField,
+                    "Giá (VND):", priceField,
+                    "Số lượng sẵn có:", quantityField
+                };
+
+                int option = JOptionPane.showConfirmDialog(null, fields, "Chỉnh sửa thông tin món", JOptionPane.OK_CANCEL_OPTION);
+
+                if (option == JOptionPane.OK_OPTION) {
+                    int newId = Integer.parseInt(idField.getText());
+                    String newName = nameField.getText();
+                    int newPrice = Integer.parseInt(priceField.getText());
+                    int newQuantity = Integer.parseInt(quantityField.getText());
+                    
+                    try {
+                        Food_Cache.updateFood(id, newId, newName, newPrice, newQuantity);
+                        updateTable();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật món ăn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn một món ăn để chỉnh sửa.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
+        else if(e.getSource() == btnXoa) {
+        	JTextField idField = new JTextField();
+            Object[] fields = {"Nhập ID món ăn cần xóa:", idField};
+            int option = JOptionPane.showConfirmDialog(null, fields, "Xóa món ăn", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                int id = Integer.parseInt(idField.getText());
+                try {
+                    Food_Cache.deleteFood(id);
+                    updateTable();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi khi xóa món ăn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    // ex.printStackTrace();
+                }
             }
         }
     }
