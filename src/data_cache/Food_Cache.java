@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import connectDTB.connect;
 
 public class Food_Cache {
@@ -35,4 +37,26 @@ public class Food_Cache {
 	        }
 			}
 		}
+		public static void addFood(int id, String name, int price, int quantity) {
+		    FID.add(id);
+		    FName.add(name);
+		    FPrice.add(price);
+		    FQuantity.add(quantity);
+		}
+		
+		public static void addFoodToDatabase(int id, String name, int price, int quantity) throws SQLException {
+	        connect connector = new connect();
+	        Connection conn = connector.connection;
+	        if (conn != null) {
+	            String sql = "INSERT INTO food_category (Food_ID, Name, Price, Quantity) VALUES (?, ?, ?, ?)";
+	            PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+	            preparedStatement.setInt(1, id);
+	            preparedStatement.setString(2, name);
+	            preparedStatement.setInt(3, price);
+	            preparedStatement.setInt(4, quantity);
+	            preparedStatement.executeUpdate();
+	            preparedStatement.close();
+	            conn.close();
+	        }
+	    }
 }
