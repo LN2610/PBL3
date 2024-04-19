@@ -6,6 +6,7 @@ import java.awt.*;
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import admin.GUI;
 
 public class dangnhap1 extends JFrame implements ActionListener {
 
@@ -113,8 +114,8 @@ public class dangnhap1 extends JFrame implements ActionListener {
             // Đóng cửa sổ hiện tại
             frame.dispose();
             if (isAdmin) {
-                // Hiển thị giao diện cho admin
-                // adminInterface.setVisible(true);
+            	GUI adminInterface = new GUI();
+            	adminInterface.setVisible(true);
             } else {
                 // Hiển thị giao diện cho nhân viên
                 // employeeInterface.setVisible(true);
