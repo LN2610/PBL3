@@ -20,22 +20,6 @@ public class dangnhap1 extends JFrame implements ActionListener {
     private boolean isAdmin;
 
     /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    dangnhap1 window = new dangnhap1(true);
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
      * Create the application.
      */
     public dangnhap1(boolean isAdmin) {
