@@ -37,14 +37,8 @@ public class Food_Cache {
 	        }
 			}
 		}
-		public static void addFood(int id, String name, int price, int quantity) {
-		    FID.add(id);
-		    FName.add(name);
-		    FPrice.add(price);
-		    FQuantity.add(quantity);
-		}
 		
-		public static void addFoodToDatabase(int id, String name, int price, int quantity) throws SQLException {
+		public static void addFood(int id, String name, int price, int quantity) throws SQLException {
 	        connect connector = new connect();
 	        Connection conn = connector.connection;
 	        if (conn != null) {
@@ -58,5 +52,55 @@ public class Food_Cache {
 	            preparedStatement.close();
 	            conn.close();
 	        }
+	        FID.add(id);
+		    FName.add(name);
+		    FPrice.add(price);
+		    FQuantity.add(quantity);
 	    }
+		
+		public static void updateFood(int id, int newId, String newName, int newPrice, int newQuantity) throws SQLException {
+		    connect connector = new connect();
+		    Connection conn = connector.connection;
+		    if (conn != null) {
+		        String sql = "UPDATE food_category SET Food_ID = ?, Name = ?, Price = ?, Quantity = ? WHERE Food_ID = ?";
+		        PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+		        preparedStatement.setInt(1, newId);
+		        preparedStatement.setString(2, newName);
+		        preparedStatement.setInt(3, newPrice);
+		        preparedStatement.setInt(4, newQuantity);
+		        preparedStatement.setInt(5, id);
+		        preparedStatement.executeUpdate();
+		        preparedStatement.close();
+		        conn.close();
+		    }
+
+		    int index = FID.indexOf(id);
+		    if (index != -1) { // Kiểm tra xem mục có tồn tại trong danh sách không
+		        FID.set(index, newId); // Cập nhật thông tin
+		        FName.set(index, newName);
+		        FPrice.set(index, newPrice);
+		        FQuantity.set(index, newQuantity);
+		    }
+		}
+
+		
+		public static void deleteFood(int id) throws SQLException {
+		    connect connector = new connect();
+		    Connection conn = connector.connection;
+		    if (conn != null) {
+		        String sql = "DELETE FROM food_category WHERE Food_ID = ?";
+		        PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+		        preparedStatement.setInt(1, id);
+		        preparedStatement.executeUpdate();
+		        preparedStatement.close();
+		        conn.close();
+		    }
+		    int index = FID.indexOf(id);
+	        if (index != -1) { // Kiểm tra xem mục có tồn tại trong danh sách không
+	            FID.remove(index); // Xóa khỏi danh sách
+	            FName.remove(index);
+	            FPrice.remove(index);
+	            FQuantity.remove(index);
+	        }
+		}
 }
