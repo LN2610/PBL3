@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PhanQuyen extends JFrame implements ActionListener {
+public class start extends JFrame implements ActionListener {
 	
 	private JPanel contentPane;
     private JButton adminButton;
@@ -15,32 +15,44 @@ public class PhanQuyen extends JFrame implements ActionListener {
     private dangnhap1 dangNhapWindow; 
     private boolean isAdmin;
 
-    public PhanQuyen() {
+    public start() {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 780, 415);
+		setBounds(100, 100, 400, 300);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(0, 100, 0));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		adminButton = new JButton("Admin");
+		adminButton = new JButton("ADMIN");
+		adminButton.setVerticalAlignment(SwingConstants.TOP);
+		adminButton.setBackground(new Color(245, 245, 245));
 		adminButton.setForeground(new Color(128, 0, 0));
 		adminButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		adminButton.setBounds(92, 56, 197, 87);
+		adminButton.setBounds(35, 132, 133, 33);
 		contentPane.add(adminButton);
 		
 		employeeButton = new JButton("Employee");
+		employeeButton.setBackground(new Color(245, 255, 250));
 		employeeButton.setForeground(new Color(128, 0, 0));
 		employeeButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		employeeButton.setBounds(440, 56, 197, 87);
+		employeeButton.setBounds(217, 132, 146, 33);
 		contentPane.add(employeeButton);
 		
 		exit = new JButton("Exit");
+		exit.setBackground(new Color(245, 255, 250));
 		exit.setForeground(new Color(128, 0, 0));
 		exit.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		exit.setBounds(254, 225, 197, 87);
+		exit.setBounds(103, 189, 161, 33);
 		contentPane.add(exit);
+		
+		JLabel lblNewLabel = new JLabel("Select Your Position");
+		lblNewLabel.setForeground(new Color(245, 255, 250));
+		lblNewLabel.setFont(new Font("Forte", Font.ITALIC, 25));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(48, 22, 286, 64);
+		contentPane.add(lblNewLabel);
         
        
         adminButton.addActionListener(this);
@@ -68,6 +80,6 @@ public class PhanQuyen extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(PhanQuyen::new);
+        SwingUtilities.invokeLater(start::new);
     }
 }
