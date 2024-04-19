@@ -7,16 +7,17 @@ import connectDTB.connect;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class GUI extends JFrame implements ActionListener {
 
-    private static JFrame frame;
+    public static JFrame frame;
     private static JMenuBar menuBar;
     private static JPanel panel;
     
-    food faFood; 
-    drinks dr; 
-    employee ep;
+    public food faFood; 
+    public drinks dr; 
+    public employee ep;
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -32,7 +33,8 @@ public class GUI extends JFrame implements ActionListener {
         });
     }
 
-    public  GUI() {
+    public  GUI()  {
+    	
     	 frame = new JFrame();
          frame.setTitle("ADMIN");
          frame.setBounds(0, 0, 700, 700);
@@ -80,6 +82,7 @@ public class GUI extends JFrame implements ActionListener {
         
          frame.getContentPane().add(panel);
          mntmNhanVien.addActionListener(this);
+         setVisible(true);
     }
     private void add_panel(JPanel panel) {
     	frame.getContentPane().removeAll(); 

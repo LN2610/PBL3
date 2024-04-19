@@ -7,6 +7,10 @@ import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import admin.GUI;
+import admin.drinks;
+import admin.employee;
+import admin.food;
+import connectDTB.connect;
 
 public class dangnhap1 extends JFrame implements ActionListener {
 
@@ -114,8 +118,19 @@ public class dangnhap1 extends JFrame implements ActionListener {
             // Đóng cửa sổ hiện tại
             frame.dispose();
             if (isAdmin) {
-            	GUI adminInterface = new GUI();
-            	adminInterface.setVisible(true);
+            	GUI window = new GUI();
+            	 new connect();
+                 try {
+					window.faFood = new food();
+					 window.dr = new drinks();
+	                 window.ep = new employee();
+	                 window.frame.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                
+//            	adminInterface.setVisible(true);
             } else {
                 // Hiển thị giao diện cho nhân viên
                 // employeeInterface.setVisible(true);
@@ -133,7 +148,7 @@ public class dangnhap1 extends JFrame implements ActionListener {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/nhahang", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
             
             String sql;
             if (isAdmin) {
