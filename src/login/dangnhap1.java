@@ -6,7 +6,7 @@ import java.awt.*;
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import admin.GUI;
+import admin.CTC;
 import admin.drinks;
 import admin.employee;
 import admin.food;
@@ -102,7 +102,7 @@ public class dangnhap1 extends JFrame implements ActionListener {
             // Đóng cửa sổ hiện tại
             frame.dispose();
             if (isAdmin) {
-            	GUI window = new GUI();
+            	CTC window = new CTC();
             	 new connect();
                  try {
 					window.faFood = new food();
