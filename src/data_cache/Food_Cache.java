@@ -96,8 +96,8 @@ public class Food_Cache {
 		        conn.close();
 		    }
 		    int index = FID.indexOf(id);
-	        if (index != -1) { // Kiểm tra xem mục có tồn tại trong danh sách không
-	            FID.remove(index); // Xóa khỏi danh sách
+	        if (index != -1) { 
+	            FID.remove(index); 
 	            FName.remove(index);
 	            FPrice.remove(index);
 	            FQuantity.remove(index);

@@ -14,4 +14,41 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/image/Awicons-Vista-Artistic-Chart.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Awicons-Vista-Artistic-Chart.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Designcontest-Ecommerce-Business-Dollar.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Designcontest-Ecommerce-Business-Dollar.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Dtafalonso-Android-Lollipop-Settings.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Dtafalonso-Android-Lollipop-Settings.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Hopstarter-Sleek-Xp-Basic-Preppy.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Hopstarter-Sleek-Xp-Basic-Preppy.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Jamespeng-Cuisine-Pork-Chop-Set.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Jamespeng-Cuisine-Pork-Chop-Set.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Papirus-Team-Papirus-Apps-System-file-manager.24.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Papirus-Team-Papirus-Apps-System-file-manager.24.png</location>
+		</link>
+		<link>
+			<name>src/image/Papirus-Team-Papirus-Apps-System-file-manager.48.png</name>
+			<type>1</type>
+			<location>D:/Dev_data/ico/Papirus-Team-Papirus-Apps-System-file-manager.48.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>
