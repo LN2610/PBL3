@@ -13,6 +13,7 @@ import admin.statistics;
 import connectDTB.connect;
 import data_cache.Drink_Cache;
 import data_cache.Food_Cache;
+import staff.Staff_GUI;
 
 public class dangnhap1 extends JFrame implements ActionListener {
 
@@ -20,7 +21,7 @@ public class dangnhap1 extends JFrame implements ActionListener {
     private JTextField textField;
     private JPasswordField password;
     private boolean isAdmin;
-
+    public static String loggedInUserID = "";
     /**
      * Create the application.
      */
@@ -29,7 +30,6 @@ public class dangnhap1 extends JFrame implements ActionListener {
         initialize();
         frame.setVisible(true);
     }
-
     /**
      * Initialize the contents of the frame.
      */
@@ -40,7 +40,7 @@ public class dangnhap1 extends JFrame implements ActionListener {
         frame.getContentPane().setLayout(null);
 
         JLabel lblNewLabel = new JLabel("New label");
-        lblNewLabel.setIcon(new ImageIcon("D:\\PBL\\PBL3\\bin\\image\\logo.png"));
+        lblNewLabel.setIcon(new ImageIcon(dangnhap1.class.getResource("/image/logo.png")));
         lblNewLabel.setBounds(-50, -50, 450, 450);
         frame.getContentPane().add(lblNewLabel);
 
@@ -119,8 +119,10 @@ public class dangnhap1 extends JFrame implements ActionListener {
                 
 //            	adminInterface.setVisible(true);
             } else {
-                // Hiển thị giao diện cho nhân viên
-                // employeeInterface.setVisible(true);
+            	loggedInUserID = username;
+                Staff_GUI st = new Staff_GUI();
+                st.setVisible(true);
+            	
             }
         } else {
             JOptionPane.showMessageDialog(frame, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
