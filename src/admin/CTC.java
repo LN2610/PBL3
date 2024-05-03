@@ -30,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 
 import data_cache.Drink_Cache;
 import data_cache.Food_Cache;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 
 public class CTC extends JFrame implements ActionListener {
@@ -47,7 +49,7 @@ public class CTC extends JFrame implements ActionListener {
     private JTextField txtGia;
     private JComboBox comboBox;
     public employee ep; 
-    
+    public statistics sttc;
     
     
     public void GUI() {
@@ -77,6 +79,15 @@ public class CTC extends JFrame implements ActionListener {
          menuBar.add(mnNewMenu);
          
          JMenuItem mntmDoanhthu = new JMenuItem("Doanh thu");
+         mntmDoanhthu.addActionListener(new ActionListener() {
+         	public void actionPerformed(ActionEvent e) {
+         		
+         		if(frame.getContentPane().getComponent(0) != sttc) {
+         			add_panel(sttc);
+         		}
+         	}
+         });
+         
          mntmDoanhthu.setIcon(new ImageIcon(CTC.class.getResource("/image/Designcontest-Ecommerce-Business-Dollar.24.png")));
          mnNewMenu.add(mntmDoanhthu);
          
@@ -388,16 +399,8 @@ public class CTC extends JFrame implements ActionListener {
 			
 				if (frame.getContentPane().getComponent(0) != ep) {
             		add_panel(ep);
-            	}
-			
-                
+				}    
                 break;  
-            case "Doanh thu":
-                
-                break;
-            case "Xuất thống kê":
-                
-                break;
                
             case "Thoát":
                 System.exit(0);

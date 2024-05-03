@@ -28,13 +28,6 @@ public class chart extends JFrame implements ActionListener {
     private static JSpinner end;
     private AbstractButton txtStartDate, txtEndDate;
 
-    private static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/data";
-        String username = "root";
-        String password = "";
-        return DriverManager.getConnection(url, username, password);
-    }
-
     private static CategoryDataset createDataset(String startDate, String endDate, String type) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         connect connector = new connect();

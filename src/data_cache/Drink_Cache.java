@@ -20,15 +20,17 @@ public class Drink_Cache {
     public Drink_Cache() throws SQLException {
         connect connector = new connect();
         Connection conn = connector.connection;
+       
         if (conn != null) {
             Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM drink_category";
+            String sql = "SELECT * FROM food_drink WHERE classify = 1";
             ResultSet resultSet = stmt.executeQuery(sql);
             while (resultSet.next()) {
-                Drink_ID.add(resultSet.getInt("Drink_ID"));
+                Drink_ID.add(resultSet.getInt("ID"));
                 Drink_Name.add(resultSet.getString("Name"));
                 Drink_Price.add(resultSet.getInt("Price"));
                 Drink_Quantity.add(resultSet.getInt("Quantity"));
+               
             }
             resultSet.close();
             stmt.close();
@@ -42,7 +44,7 @@ public class Drink_Cache {
         connect connector = new connect();
         Connection conn = connector.connection;
         if (conn != null) {
-            String sql = "INSERT INTO drink_category (Drink_ID, Name, Price, Quantity) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO food_drink (ID, Name, Price, Quantity) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             preparedStatement.setString(2, name);
@@ -62,7 +64,7 @@ public class Drink_Cache {
 	    connect connector = new connect();
 	    Connection conn = connector.connection;
 	    if (conn != null) {
-	        String sql = "UPDATE drink_category SET Drink_ID = ?, Name = ?, Price = ?, Quantity = ? WHERE Drink_ID = ?";
+	        String sql = "UPDATE food_drink SET ID = ?, Name = ?, Price = ?, Quantity = ? WHERE ID = ?";
 	        PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
 	        preparedStatement.setInt(1, newId);
 	        preparedStatement.setString(2, newName);
@@ -75,8 +77,8 @@ public class Drink_Cache {
 	    }
 
 	    int index = Drink_ID.indexOf(id);
-	    if (index != -1) { // Kiểm tra xem mục có tồn tại trong danh sách không
-	        Drink_ID.set(index, newId); // Cập nhật thông tin
+	    if (index != -1) { 
+	        Drink_ID.set(index, newId);
 	        Drink_Name.set(index, newName);
 	        Drink_Price.set(index, newPrice);
 	        Drink_Quantity.set(index, newQuantity);
@@ -88,7 +90,7 @@ public class Drink_Cache {
 	    connect connector = new connect();
 	    Connection conn = connector.connection;
 	    if (conn != null) {
-	        String sql = "DELETE FROM drink_category WHERE Drink_ID = ?";
+	        String sql = "DELETE FROM food_drink WHERE ID = ?";
 	        PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
 	        preparedStatement.setInt(1, id);
 	        preparedStatement.executeUpdate();

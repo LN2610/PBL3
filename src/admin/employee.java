@@ -140,7 +140,7 @@ public  class employee extends JPanel {
 		panel_3.add(panel_1_1_2);
 		panel_1_1_2.setLayout(new FlowLayout(FlowLayout.CENTER, 25, 10));
 		
-		JLabel lblNewPassword = new JLabel("New password");
+		JLabel lblNewPassword = new JLabel("Mật khẩu");
 		lblNewPassword.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		panel_1_1_2.add(lblNewPassword);
 		
@@ -162,12 +162,12 @@ public  class employee extends JPanel {
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(171, 11, 89, 24);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Admin", "Employee"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Quản lý", "Nhân viên"}));
 		comboBox.setFont(new Font("Times New Roman", Font.ITALIC, 15));
 		panel_1_1_3.add(comboBox);
 		
 		JButton btnNewButton = new JButton("Thêm mới");
-		btnNewButton.setBounds(59, 314, 148, 39);
+		btnNewButton.setBounds(83, 248, 168, 48);
 		panel_3.add(btnNewButton);
 		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		
@@ -216,7 +216,7 @@ public  class employee extends JPanel {
 		});
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(30, 248, 541, 48);
+		panel_2.setBounds(30, 190, 541, 48);
 		panel_3.add(panel_2);
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		
@@ -258,12 +258,12 @@ public  class employee extends JPanel {
 		    }
 		});
 
-		btnXa.setBounds(226, 314, 142, 39);
+		btnXa.setBounds(83, 314, 168, 48);
 		panel_3.add(btnXa);
 		btnXa.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		
 		JButton btnSa = new JButton("Sửa");
-		btnSa.setBounds(396, 314, 130, 39);
+		btnSa.setBounds(340, 248, 168, 48);
 		panel_3.add(btnSa);
 		btnSa.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		new Employee_Cache();
@@ -284,6 +284,23 @@ public  class employee extends JPanel {
 		ButtonGroup genderGroup = new ButtonGroup();
 		model = new DefaultTableModel(data,columnNames);
 		table.setModel(model);
+		
+		JButton btntLi = new JButton("Đặt lại");
+		btntLi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == btntLi) {
+					textField.setText("");
+					textField_1.setText("");
+					textField_2.setText("");
+					textField_3.setText("");
+					textField_4.setText("");
+					textField_5.setText("");
+				}
+			}
+		});
+		btntLi.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btntLi.setBounds(340, 314, 168, 48);
+		panel_3.add(btntLi);
 		
 	}
 	public static void Set_TableModel(Object[] data) {

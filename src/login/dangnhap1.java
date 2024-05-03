@@ -7,10 +7,12 @@ import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import admin.CTC;
-import admin.drinks;
+
 import admin.employee;
-import admin.food;
+import admin.statistics;
 import connectDTB.connect;
+import data_cache.Drink_Cache;
+import data_cache.Food_Cache;
 
 public class dangnhap1 extends JFrame implements ActionListener {
 
@@ -105,8 +107,9 @@ public class dangnhap1 extends JFrame implements ActionListener {
             	CTC window = new CTC();
             	 new connect();
                  try {
-					window.faFood = new food();
-					 window.dr = new drinks();
+                	window.sttc = new statistics();
+					 new Food_Cache();
+					 new Drink_Cache();
 	                 window.ep = new employee();
 	                 window.frame.setVisible(true);
 				} catch (SQLException e1) {

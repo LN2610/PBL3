@@ -1,173 +1,157 @@
 package admin;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
-import java.awt.Color;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import connectDTB.connect;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class statistics extends JPanel {
-
+	private JButton btnShowChart;
+    private JComboBox<String> comboBox;
+    private ChartPanel chartPanel;
+    private static JSpinner start;
+    private static JSpinner end;
+    private AbstractButton txtStartDate, txtEndDate;
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
 
 	/**
 	 * Create the panel.
 	 */
 	public statistics() {
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		add(panel);
-		
-		JScrollPane scrollPane = new JScrollPane((Component) null);
-		scrollPane.setBounds(830, 100, 700, 500);
-		panel.add(scrollPane);
-		
-		JLabel lblNewLabel = new JLabel("Quản lý thực đơn");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 40));
-		lblNewLabel.setBounds(215, 36, 452, 78);
-		panel.add(lblNewLabel);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(50, 222, 419, 53);
-		panel.add(panel_1);
-		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		
-		JLabel lblNewLabel_1 = new JLabel("Tìm kiếm");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		panel_1.add(lblNewLabel_1);
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		textField.setColumns(20);
-		panel_1.add(textField);
-		
-		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setBounds(50, 285, 419, 53);
-		panel.add(panel_1_1);
-		panel_1_1.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		
-		JLabel lblNewLabel_1_1 = new JLabel("Mã món");
-		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		panel_1_1.add(lblNewLabel_1_1);
-		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		textField_1.setColumns(20);
-		panel_1_1.add(textField_1);
-		
-		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setBounds(50, 348, 419, 53);
-		panel.add(panel_1_2);
-		panel_1_2.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		
-		JLabel lblNewLabel_1_2 = new JLabel("Tên món");
-		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_2.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		panel_1_2.add(lblNewLabel_1_2);
-		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		textField_2.setColumns(20);
-		panel_1_2.add(textField_2);
-		
-		JPanel panel_1_3 = new JPanel();
-		panel_1_3.setBounds(50, 411, 419, 53);
-		panel.add(panel_1_3);
-		panel_1_3.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		
-		JLabel lblNewLabel_1_3 = new JLabel("Giá thành");
-		lblNewLabel_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_3.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		panel_1_3.add(lblNewLabel_1_3);
-		
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		textField_3.setColumns(20);
-		panel_1_3.add(textField_3);
-		
-		JPanel panel_1_4 = new JPanel();
-		panel_1_4.setBounds(50, 474, 419, 53);
-		panel.add(panel_1_4);
-		panel_1_4.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
-		
-		JLabel lblNewLabel_1_4 = new JLabel("Số lượng");
-		lblNewLabel_1_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_4.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		panel_1_4.add(lblNewLabel_1_4);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setPreferredSize(new Dimension(60, 30));
-		spinner.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		panel_1_4.add(spinner);
-		
-		JLabel lblDanhSchMn = new JLabel("Danh sách món");
-		lblDanhSchMn.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 40));
-		lblDanhSchMn.setBounds(830, 12, 452, 78);
-		panel.add(lblDanhSchMn);
-		
-		JButton btnNewButton = new JButton("Thêm món");
-		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnNewButton.setBackground(new Color(124, 252, 0));
-		btnNewButton.setBounds(508, 285, 188, 39);
-		panel.add(btnNewButton);
-		
-		JButton btnXaMn = new JButton("Xóa món");
-		btnXaMn.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnXaMn.setBackground(Color.RED);
-		btnXaMn.setBounds(508, 348, 188, 39);
-		panel.add(btnXaMn);
-		
-		JButton btnSaMn = new JButton("Sửa món");
-		btnSaMn.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnSaMn.setBackground(new Color(255, 215, 0));
-		btnSaMn.setBounds(508, 411, 188, 39);
-		panel.add(btnSaMn);
-		
-		JButton btnTmKim = new JButton("Tìm");
-		btnTmKim.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnTmKim.setBackground(new Color(245, 255, 250));
-		btnTmKim.setBounds(508, 222, 188, 39);
-		panel.add(btnTmKim);
-		
-		JButton btntLi = new JButton("Đặt lại");
-		btntLi.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btntLi.setBackground(new Color(245, 255, 250));
-		btntLi.setBounds(281, 620, 188, 39);
-		panel.add(btntLi);
-		
-		JButton btnThot = new JButton("Thoát");
-		btnThot.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnThot.setBackground(new Color(245, 255, 250));
-		btnThot.setBounds(508, 620, 188, 39);
-		panel.add(btnThot);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 20));
-		comboBox.setBounds(346, 124, 166, 39);
-		panel.add(comboBox);
-		
-		JButton btnLu = new JButton("Lưu");
-		btnLu.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
-		btnLu.setBackground(new Color(245, 255, 250));
-		btnLu.setBounds(50, 620, 188, 39);
-		panel.add(btnLu);
+		setBounds(0, 0, 1540, 815);
+        setLayout(null);
+        JLabel lblStartDate = new JLabel("Từ:");
+        lblStartDate.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+        lblStartDate.setBounds(279, 6, 39, 27);
+        add(lblStartDate);
+        
+        start = new JSpinner();
+        start.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+        start.setBounds(328, 10, 156, 20);
+        add(start);
+        start.setModel(new SpinnerDateModel(new Date(1713978000000L), null, null, Calendar.DAY_OF_YEAR));
 
+        JLabel lblEndDate = new JLabel("Đến:");
+        lblEndDate.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
+        lblEndDate.setBounds(514, 9, 44, 20);
+        add(lblEndDate);
+        
+        end = new JSpinner();
+        end.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+        end.setBounds(557, 10, 156, 20);
+        add(end);
+        end.setModel(new SpinnerDateModel(new Date(1713978000000L), null, null, Calendar.DAY_OF_YEAR));
+
+        String[] types = {"Ngày", "Tháng", "Năm"};
+        comboBox = new JComboBox<>(types);
+        comboBox.setBounds(742, 12, 54, 19);
+        add(comboBox);
+
+        btnShowChart = new JButton("Xem biểu đồ");
+        btnShowChart.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 15));
+        btnShowChart.setBounds(817, 11, 125, 21);
+        btnShowChart.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if (e.getSource() == btnShowChart) {
+        			
+            		String strStartDate = null, strEndDate = null;
+                    
+                    Date startDate = (Date) start.getValue();
+                    Date endDate = (Date) end.getValue();
+                        
+                        // Chuyển đổi ngày tháng năm thành chuỗi định dạng yyyy-MM-dd
+                        strStartDate = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+                        strEndDate = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+                        
+                     // Kiểm tra ngày kết thúc phải lớn hơn ngày bắt đầu  
+                     if (strEndDate.compareTo(strStartDate) < 0)
+                                // Nếu ngày kết thúc không lớn hơn ngày bắt đầu, hiển thị thông báo và yêu cầu nhập lại
+                        JOptionPane.showMessageDialog(null, "Ngày kết thúc phải lớn hơn ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                     else {
+                    String selectedType = (String) comboBox.getSelectedItem();
+                    JFreeChart chart = createChart(strStartDate, strEndDate, selectedType);
+                    chartPanel.setChart(chart);
+                     }
+                }
+        	}
+        });
+        
+        add(btnShowChart);
+
+        chartPanel = new ChartPanel(null);
+        chartPanel.setBounds(117, 84, 1354, 656);
+        chartPanel.setPreferredSize(new Dimension(560, 367));
+        add(chartPanel);
+    
 	}
+	private static CategoryDataset createDataset(String startDate, String endDate, String type) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        connect connector = new connect();
+        Connection conn = connector.connection;
+        if (conn != null) {
+            String query = "";
+            switch (type) {
+                case "Ngày":
+                    query = "SELECT DATE(time) as time, SUM(total) as total FROM bill WHERE DATE(time) BETWEEN ? AND ? GROUP BY DATE(time)";
+                    break;
+                case "Tháng":
+                    query = "SELECT MONTH(time) AS time, SUM(total) AS total FROM bill WHERE time BETWEEN ? AND ? GROUP BY  MONTH(time);";
+                    break;
+                case "Năm":
+                    query = "SELECT YEAR(time) AS time, SUM(total) AS total FROM bill WHERE YEAR(time) BETWEEN ? AND ? GROUP BY YEAR(time)";
+                    break;
+            }
 
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, startDate);
+                stmt.setString(2, endDate);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String time = rs.getString("time");
+                    int total = rs.getInt("total");
+                    dataset.addValue(total, "Số tiền", time);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                connector.closeConnection();
+            }
+        }
+        return dataset;
+    }
+	public JFreeChart createChart(String startDate, String endDate, String type) {
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "BIỂU ĐỒ DOANH THU NHÀ HÀNG",
+                type, "Số tiền",
+                createDataset(startDate, endDate, type), PlotOrientation.VERTICAL, false, false, false);
+        return barChart;
+    }
+	
 }
