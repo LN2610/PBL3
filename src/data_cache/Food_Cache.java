@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import com.mysql.jdbc.PreparedStatement;
 
 import connectDTB.connect;
@@ -19,7 +17,6 @@ public class Food_Cache {
 		public static List<Integer>  FPrice = new ArrayList<>();;
 		public static List<Integer>  FQuantity = new ArrayList<>();
 		public Food_Cache() throws SQLException {	
-			
 			connect connector = new connect();
 	        Connection conn = connector.connection;
 			if( conn != null) {
@@ -41,6 +38,23 @@ public class Food_Cache {
 			}
 		}
 		
+		 public static int getCurrentQuantity(int id) throws SQLException {
+		        connect connector = new connect();
+		        Connection conn = connector.connection;
+		        int currentQuantity = 0;
+		        if (conn != null) {
+		            String sql = "SELECT Quantity FROM food_drink WHERE ID = ?";
+		            PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+		            preparedStatement.setInt(1, id);
+		            ResultSet resultSet = preparedStatement.executeQuery();
+		            if (resultSet.next()) 
+		                currentQuantity = resultSet.getInt("Quantity");
+		            resultSet.close();
+		            preparedStatement.close();
+		            conn.close();
+		        }
+		        return currentQuantity;
+		 }
 		public static void addFood(int id, String name, int price, int quantity) throws SQLException {
 	        connect connector = new connect();
 	        Connection conn = connector.connection;
@@ -105,5 +119,25 @@ public class Food_Cache {
 	            FPrice.remove(index);
 	            FQuantity.remove(index);
 	        }
+		}
+
+		public static void updateQuantity(int id, int newQuantity) throws SQLException {
+		    connect connector = new connect();
+		    Connection conn = connector.connection;
+		    if (conn != null) {
+		    	int currentQuantity = getCurrentQuantity(id);
+		        String sql = "UPDATE food_drink SET Quantity = ? WHERE ID = ? AND classify = 0"; 
+		        PreparedStatement preparedStatement = (PreparedStatement) conn.prepareStatement(sql);
+		        preparedStatement.setInt(1, currentQuantity-newQuantity);
+		        preparedStatement.setInt(2, id);
+		        preparedStatement.executeUpdate();
+		        preparedStatement.close();
+		        conn.close();
+		    }
+		    int index = FID.indexOf(id);
+		    if (index != -1) {
+		        FQuantity.set(index, newQuantity);
+		    }
+
 		}
 }
