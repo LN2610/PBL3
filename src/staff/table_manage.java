@@ -13,7 +13,9 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import connectDTB.connect;
 import data_cache.*;
+import login.*;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,6 +24,11 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.foreign.ValueLayout.OfBoolean;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,6 +40,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class table_manage extends JFrame {
 
@@ -57,6 +67,36 @@ public class table_manage extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public static String getTimeFromSystem() {
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = currentTime.format(formatter);
+        return formattedTime;
+    }
+	
+	public int getCurrentBillID() {
+	    int currentBillID = 0;
+	    try {
+	        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
+	        String sql = "SELECT MAX(bill_ID) FROM bill";
+	        PreparedStatement pstmt = con.prepareStatement(sql);
+	        ResultSet rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            currentBillID = rs.getInt(1);
+	            if (!rs.wasNull()) {
+	                currentBillID++; // Tăng giá trị lên một nếu kết quả không phải null
+	            }
+	        }
+	        rs.close();
+	        pstmt.close();
+	        con.close();
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+	    return currentBillID;
 	}
 
 	/**
@@ -224,18 +264,27 @@ public class table_manage extends JFrame {
 				    	 }
 				     }
 			     }
-			     if(id != -1 && price != -1) {
-				     Object[] row = new Object[4];
-				     row[0] = id; 
-				     row[1] = selectedItem;
-				     row[2] = price; 
-				     row[3] = quantity;
-				     model.addRow(row);
-				     total += price * quantity;
+			     //kiểm tra món ăn đã được chọn trước đó hay chưa
+			     boolean itemExists = false;
+			     for (int i = 0; i < model.getRowCount(); i++) {
+			         String existingItem = (String) model.getValueAt(i, 1);
+			         if (existingItem.equals(selectedItem)) {
+			             itemExists = true;
+			             break;
+			         }
 			     }
-			     else {
-			    	 JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin về món ăn " + selectedItem);
-				}
+			     if (itemExists) {
+			         JOptionPane.showMessageDialog(null, "Món ăn đã được chọn trước đó. Vui lòng chọn một món khác.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+
+			     } else {
+			         Object[] row = new Object[4];
+			         row[0] = id; 
+			         row[1] = selectedItem;
+			         row[2] = price; 
+			         row[3] = quantity;
+			         model.addRow(row);
+			         total += price * quantity;
+			     }
 			     textPane.setText(String.valueOf(total));
 			}
 		});
@@ -247,7 +296,27 @@ public class table_manage extends JFrame {
 		btnSua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//Sửa danh sách món đã order
+				int selectedRowIndex = table.getSelectedRow();
+				if (selectedRowIndex != -1) {
+				    String selectedFoodName = (String) table.getValueAt(selectedRowIndex, 1);
+				    String input = JOptionPane.showInputDialog(null, "Nhập số lượng mới cho món " + selectedFoodName + ":", "Sửa số lượng", JOptionPane.PLAIN_MESSAGE);
+				    if (input != null && !input.isEmpty()) {
+				        try {
+				            int oldQuantity = (int) model.getValueAt(selectedRowIndex, 3);
+				            int price = (int) model.getValueAt(selectedRowIndex, 2);
+				            int newQuantity = Integer.parseInt(input);
+				            total -= price * oldQuantity;
+				            total += price * newQuantity;
+				            model.setValueAt(newQuantity, selectedRowIndex, 3);
+				            textPane.setText(String.valueOf(total));
+				        } catch (NumberFormatException ex) {
+				            JOptionPane.showMessageDialog(null, "Vui lòng nhập một số nguyên hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+				        }
+				    }
+				} else {
+				    JOptionPane.showMessageDialog(null, "Vui lòng chọn một món ăn để có thể sửa số lượng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+				}
+
 			}
 		});
 		panel2.add(btnSua);
@@ -258,12 +327,61 @@ public class table_manage extends JFrame {
 		btnChotDon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//Chốt đơn order
+				if (model.getRowCount() == 0) {
+		            JOptionPane.showMessageDialog(null, "Bạn chưa chọn món ăn nào.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+				
+				dangnhap1 loginObject = new dangnhap1();
+				int tableID = Integer.parseInt(textpane.getText());
+		        String time = getTimeFromSystem(); 
+		        //String empID = loginObject.getLoggedInUserID();
+		        String empID = "171200";
+		        long totalBill = total;
+		        Bill_Cache billCache = new Bill_Cache();
+		        int currentBillID = getCurrentBillID(); 
+		        boolean success = billCache.addBill(currentBillID, time, totalBill, tableID, empID, 0);
+		        if (!success) {
+		            JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+		        for (int i = 0; i < model.getRowCount(); i++) {
+		            int itemID = (int) model.getValueAt(i, 0);
+		            int quantity = (int) model.getValueAt(i, 3);
+		            int price = (int) model.getValueAt(i, 2)*quantity;
+		            success = billCache.addOrderDetail(currentBillID, itemID, quantity, price);
+		            if(isFoodSelected)
+						try {
+							Food_Cache.updateQuantity(itemID, quantity);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					else
+						try {
+							Drink_Cache.updateQuantity(itemID, quantity);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+		            if (!success) {
+		                JOptionPane.showMessageDialog(null, "Lỗi khi thêm chi tiết đơn hàng vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		                return;
+		            }
+		        }
+		      
+		        JOptionPane.showMessageDialog(null, "Hóa đơn đã được chốt thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		        model.setRowCount(0);
+		        total = 0; 
+		        textPane.setText("0");
+		    
 				int k = Integer.parseInt(textpane.getText());
 				ktbtn[k-1]=false;
 				button[k-1].setBackground(re);
 				textpane.setText("");
 			}
+		
 		});
 		panel2.add(btnChotDon);
 		
