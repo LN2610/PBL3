@@ -39,6 +39,7 @@ import data_cache.Bill_Cache;
 import data_cache.Drink_Cache;
 import data_cache.Food_Cache;
 import login.dangnhap1;
+import staff.Bill;
 
 public class Goimon extends JPanel {
 
@@ -407,6 +408,9 @@ public class Goimon extends JPanel {
 				button[k-1].setBackground(re);
 				
 				textpane.setText("");
+//				Bill bill = new Bill();
+//				
+				Bill.updateTable();
 			}
 		
 		});

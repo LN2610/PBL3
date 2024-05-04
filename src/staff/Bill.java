@@ -36,8 +36,8 @@ public class Bill extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel  panel;
-    private JTable table;
-    private DefaultTableModel model;
+    private static JTable table;
+    private static DefaultTableModel model;
     private JButton edit, issue, btnUpdate;
     private int discountPrice, finalPrice;
 	/**
@@ -216,7 +216,7 @@ public class Bill extends JPanel implements ActionListener {
 	            JOptionPane.showMessageDialog(null, "Không thể xuất hoá đơn: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	        }
 	    }
-	 private void updateTable() {
+	 public static void updateTable() {
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
 	            String url = "jdbc:mysql://localhost:3306/data"; 
@@ -245,7 +245,7 @@ public class Bill extends JPanel implements ActionListener {
 	            pstmt.close();
 	            con.close();
 	        } catch (Exception ex) {
-	            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	        }
 	    }
 	    public void editBill(Object[] rowData, Object billID) {
