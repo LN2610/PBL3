@@ -13,8 +13,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,11 +30,13 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import connectDTB.connect;
+
+//import org.apache.pdfbox.pdmodel.PDDocument;
+//import org.apache.pdfbox.pdmodel.PDPage;
+//import org.apache.pdfbox.pdmodel.PDPageContentStream;
+//import org.apache.pdfbox.pdmodel.font.PDFont;
+//import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 public class Bill extends JPanel implements ActionListener {
 
@@ -40,6 +46,8 @@ public class Bill extends JPanel implements ActionListener {
     private static DefaultTableModel model;
     private JButton edit, issue, btnUpdate;
     private int discountPrice, finalPrice;
+    private JComboBox cbx;
+    private int SelectedValue;
 	/**
 	 * Create the panel.
 	 */
@@ -79,143 +87,182 @@ public class Bill extends JPanel implements ActionListener {
 	        edit.setBounds(16, 124, 90, 54);
 	        panel_1.add(edit);
 	        edit.addActionListener(this);
+	        issue.addActionListener(this); 
+	        JLabel lbt = new JLabel("Danh sách bàn chưa thanh toán: ");
+	        lbt.setSize(230, 37);
+	        lbt.setLocation(6, 16);
+	        lbt.setBackground(Color.LIGHT_GRAY);
+	        cbx = new JComboBox<Object>();
+	        cbx.setEditable(true);
+	        cbx.setSize(110, 25);
+	        cbx.setLocation(236, 21);
 	        
 	        
-	          
+	        ArrayList<String> list = LoadDataToCombobox();
+	        for(String item : list) {
+	        	cbx.addItem(item.toString());
+	        }        
+	        
+	        JPanel panel_2 = new JPanel();
+	        panel_2.setBackground(Color.WHITE);
+	        panel_2.setBounds(6, 111, 554, 64);
+	        add(panel_2);
+	        panel_2.add(lbt);
+	        panel_2.add(cbx);
+	        panel_2.setLayout(null);
+
 	        updateTable();
 	}
-	 public void createPDF(String[] rowData, int SelectedRow, String[] content, String[] name, String[] price ,String[] quantity, Object Total, String[] total_price, int finalPrice, int discountPrice) {
+	
+	public static ArrayList<String> LoadDataToCombobox(){
+    	ArrayList<String> list = new ArrayList<String>();
+    	try {
+    		Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://localhost:3306/data"; 
+            Connection con = DriverManager.getConnection(url, "root", "");
+            String sql = "SELECT Table_ID FROM bill Where Status = false";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+            	list.add(rs.getString("Table_ID"));
+            }   
+    	} catch (Exception e) { }
+		return list;
+    	
+    }
 
-	        try {
-	            PDDocument document = new PDDocument();
-	            PDPage page = new PDPage();
-	            document.addPage(page);
-	            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-	            PDFont font = null;
-	            try {
-	                font = PDType0Font.load(document, new File("D:\\PBL\\PBL3\\src\\font\\arial-unicode-ms.ttf"));
-	            } catch (IOException e) {
-	            	JOptionPane.showMessageDialog(null, "Not found! " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-	            }
-	            float fontSize = 11;
-	            float leading = 1.5f * fontSize;
-	            float margin = 50;
-	            float yStart = page.getMediaBox().getHeight() - margin;
-	            float yPosition = yStart;
-	            String separator = "-------------------------------------------------------------";
-	            String[] combine = new String[content.length];
-	            for(int i = 0; i < content.length; i++) {
-	            	if (i < rowData.length) {
-	                    combine[i] = content[i] + ": " + rowData[i];
-	                } else {
-	                    combine[i] = content[i] + ":";
-	                }
-	            }
-	            float textWidth = font.getStringWidth("PHIẾU THANH TOÁN") / 1000 * 16;
-	            float centerX = (page.getMediaBox().getWidth() - textWidth) / 2;
-	            contentStream.beginText();
-	            contentStream.setFont(font, 16);
-	            contentStream.newLineAtOffset(centerX + 30, yPosition); 
-	            contentStream.showText("LAVA RESTAURANT");
-	            contentStream.endText();
-	            yPosition -= leading * 2;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, 14); 
-	            contentStream.newLineAtOffset(centerX + 30, yPosition); 
-	            contentStream.showText("PHIẾU THANH TOÁN");
-	            contentStream.endText();
-	            yPosition -= leading * 2; 
-	            
-	            
-	            for (String data : combine) {
-	            	contentStream.beginText();
-	                contentStream.setFont(font, fontSize);
-	                contentStream.newLineAtOffset(centerX, yPosition);
-	                contentStream.showText(data);
-	                contentStream.endText();
-	                yPosition -= leading;
-	           }
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText("Tên món                 Đơn giá    SL     Thành tiền");
-	            contentStream.endText();
-	            yPosition -= leading;
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText(separator);
-	            contentStream.endText();
-	            yPosition -= leading;
-	           
-
-	            String[] combineFood = new String[name.length];
-
-	            for (int i = 0; i < name.length; i++) {
-	                combineFood[i] = String.format("%-5s %-23s %-8s", (i + 1) + ".", name[i], price[i]) + String.format("%-2s %10s", quantity[i], total_price[i]);
-	            }
-	            for (String data : combineFood) {
-	                contentStream.beginText();
-	                contentStream.setFont(font, fontSize);
-	                contentStream.newLineAtOffset(centerX, yPosition);
-	                contentStream.showText(data);
-	                contentStream.endText();
-	                yPosition -= leading;
-	            }
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText(separator);
-	            contentStream.endText();
-	            yPosition -= leading;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText("Tổng   :" + String.format("%55s", Total.toString()));
-	            contentStream.endText();
-	            yPosition -= leading;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText("Giảm   :" + String.format("%55s", "-" + discountPrice));
-	            contentStream.endText();
-	            yPosition -= leading;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText("T.toán :" + String.format("%55s", finalPrice));
-	            contentStream.endText();
-	            yPosition -= leading;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText(separator);
-	            contentStream.endText();
-	            yPosition -= leading;
-	            
-	            contentStream.beginText();
-	            contentStream.setFont(font, fontSize);
-	            contentStream.newLineAtOffset(centerX, yPosition);
-	            contentStream.showText("        Xin cảm ơn và hẹn gặp lại quý khách!");
-	            contentStream.endText();			
-	            yPosition -= leading;
-	            
-	            // Đóng content stream
-	            contentStream.close();
-	            // Lưu tài liệu PDF ra file
-	            document.save(table.getValueAt(SelectedRow, 0).toString()+".pdf");
-	            // Đóng tài liệu PDF
-	            document.close();
-	            JOptionPane.showMessageDialog(null, "Xuất hoá đơn thành công.");
-	        } catch (Exception e) {
-	            JOptionPane.showMessageDialog(null, "Không thể xuất hoá đơn: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-	        }
-	    }
+//	 public void createPDF(String[] rowData, int SelectedRow, String[] content, String[] name, String[] price ,String[] quantity, Object Total, String[] total_price, int finalPrice, int discountPrice) {
+//
+//	        try {
+//	            PDDocument document = new PDDocument();
+//	            PDPage page = new PDPage();
+//	            document.addPage(page);
+//	            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+//	            PDFont font = null;
+//	            try {
+//	                font = PDType0Font.load(document, new File("D:\\PBL\\PBL3\\src\\font\\arial-unicode-ms.ttf"));
+//	            } catch (IOException e) {
+//	            	JOptionPane.showMessageDialog(null, "Not found! " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//	            }
+//	            float fontSize = 11;
+//	            float leading = 1.5f * fontSize;
+//	            float margin = 50;
+//	            float yStart = page.getMediaBox().getHeight() - margin;
+//	            float yPosition = yStart;
+//	            String separator = "-------------------------------------------------------------";
+//	            String[] combine = new String[content.length];
+//	            for(int i = 0; i < content.length; i++) {
+//	            	if (i < rowData.length) {
+//	                    combine[i] = content[i] + ": " + rowData[i];
+//	                } else {
+//	                    combine[i] = content[i] + ":";
+//	                }
+//	            }
+//	            float textWidth = font.getStringWidth("PHIẾU THANH TOÁN") / 1000 * 16;
+//	            float centerX = (page.getMediaBox().getWidth() - textWidth) / 2;
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, 16);
+//	            contentStream.newLineAtOffset(centerX + 30, yPosition); 
+//	            contentStream.showText("LAVA RESTAURANT");
+//	            contentStream.endText();
+//	            yPosition -= leading * 2;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, 14); 
+//	            contentStream.newLineAtOffset(centerX + 30, yPosition); 
+//	            contentStream.showText("PHIẾU THANH TOÁN");
+//	            contentStream.endText();
+//	            yPosition -= leading * 2; 
+//	            
+//	            
+//	            for (String data : combine) {
+//	            	contentStream.beginText();
+//	                contentStream.setFont(font, fontSize);
+//	                contentStream.newLineAtOffset(centerX, yPosition);
+//	                contentStream.showText(data);
+//	                contentStream.endText();
+//	                yPosition -= leading;
+//	           }
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText("Tên món                 Đơn giá    SL     Thành tiền");
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText(separator);
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	           
+//
+//	            String[] combineFood = new String[name.length];
+//
+//	            for (int i = 0; i < name.length; i++) {
+//	                combineFood[i] = String.format("%-5s %-23s %-8s", (i + 1) + ".", name[i], price[i]) + String.format("%-2s %10s", quantity[i], total_price[i]);
+//	            }
+//	            for (String data : combineFood) {
+//	                contentStream.beginText();
+//	                contentStream.setFont(font, fontSize);
+//	                contentStream.newLineAtOffset(centerX, yPosition);
+//	                contentStream.showText(data);
+//	                contentStream.endText();
+//	                yPosition -= leading;
+//	            }
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText(separator);
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText("Tổng   :" + String.format("%55s", Total.toString()));
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText("Giảm   :" + String.format("%55s", "-" + discountPrice));
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText("T.toán :" + String.format("%55s", finalPrice));
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText(separator);
+//	            contentStream.endText();
+//	            yPosition -= leading;
+//	            
+//	            contentStream.beginText();
+//	            contentStream.setFont(font, fontSize);
+//	            contentStream.newLineAtOffset(centerX, yPosition);
+//	            contentStream.showText("        Xin cảm ơn và hẹn gặp lại quý khách!");
+//	            contentStream.endText();			
+//	            yPosition -= leading;
+//	            
+//	            // Đóng content stream
+//	            contentStream.close();
+//	            // Lưu tài liệu PDF ra file
+//	            document.save(table.getValueAt(SelectedRow, 0).toString()+".pdf");
+//	            // Đóng tài liệu PDF
+//	            document.close();
+//	            JOptionPane.showMessageDialog(null, "Xuất hoá đơn thành công.");
+//	        } catch (Exception e) {
+//	            JOptionPane.showMessageDialog(null, "Không thể xuất hoá đơn: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//	        }
+//	    }
 	 public static void updateTable() {
 	        try {
 	            Class.forName("com.mysql.jdbc.Driver");
@@ -329,6 +376,16 @@ public class Bill extends JPanel implements ActionListener {
 	                   
 	                    if (rowsAffectedBill > 0) {
 	                        JOptionPane.showMessageDialog(null, "Xác nhận thanh toán thành công.");
+	                        connect connector = new connect();
+	        				Connection conn = connector.connection;
+	        				Statement stmt = null;
+//	        				String updateTableQuery = "UPDATE tables SET Status = 0 WHERE Table_ID = " + tableID; 
+//	  		        	  try {
+//	  						stmt.executeUpdate(updateTableQuery);
+//	  		        	  } catch (SQLException e1) {
+//	  						// TODO Auto-generated catch block
+//	  						e1.printStackTrace();
+//	  		        	  }
 	                    } else {
 	                        JOptionPane.showMessageDialog(null, "Không thể xác nhận thanh toán.");
 	                    }
@@ -341,6 +398,39 @@ public class Bill extends JPanel implements ActionListener {
 
 	        revalidate();
 	        repaint();
+	        
+	    }
+	    
+	    public void actionPerformed(ActionEvent e) {
+    		if (e.getSource() == edit) {
+    			SelectedValue = Integer.parseInt((String) cbx.getSelectedItem());
+    			try {
+    				String selectRow = null;
+    	    		Class.forName("com.mysql.jdbc.Driver");
+    	            String url = "jdbc:mysql://localhost:3306/data"; 
+    	            Connection con = DriverManager.getConnection(url, "root", "");
+    	            String sql = "SELECT * FROM bill Where Status = false and Table_ID = ?";
+    	            PreparedStatement pstmt = con.prepareStatement(sql);
+    	            pstmt.setInt(1, SelectedValue);
+    	            ResultSet rs = pstmt.executeQuery();
+    	            if(rs.next()) {
+    	            	selectRow = rs.getString("bill_ID"); 
+    	                Object[] rowData = new Object[model.getColumnCount()];
+    	                for (int i = 0; i < model.getColumnCount(); i++) {
+    	                    rowData[i] = rs.getObject(i + 1); 
+    	                }
+    	                Object billID = rowData[0];
+    	                Component[] components = getComponents();
+    	                for (Component component : components) {
+    	                    if (component instanceof JTextField) {
+    	                        remove(component);
+    	                    }
+    	                }
+    	                editBill(rowData, billID);
+    	            }   
+    	            
+    	    	} catch (Exception e1) { }
+    		}
 	    }
 	    public int getCurrentBillID() {
 	        int currentBillID = 0;
@@ -361,7 +451,7 @@ public class Bill extends JPanel implements ActionListener {
 	        return currentBillID;
 	    }
 
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed1(ActionEvent e) {
 			if (e.getSource() == edit) {
 	            int selectedRow = table.getSelectedRow();
 	            if (selectedRow != -1) {
@@ -429,7 +519,7 @@ public class Bill extends JPanel implements ActionListener {
 		                    ex.printStackTrace();
 		                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		                }
-		                createPDF(rowData, selectedRow, content, name, price , quantity, Total, total_price, finalPrice, discountPrice);
+		                //createPDF(rowData, selectedRow, content, name, price , quantity, Total, total_price, finalPrice, discountPrice);
 		            } else {
 		                JOptionPane.showMessageDialog(null, "Please select a row to export.", "Error", JOptionPane.ERROR_MESSAGE);
 		            }

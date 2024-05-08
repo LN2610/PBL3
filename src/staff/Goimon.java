@@ -269,69 +269,7 @@ public class Goimon extends JPanel {
 			}
 		});
 		panel2.add(btnSua);
-		
-//		JButton btnChotDon = new JButton("Chốt đơn");
-//		btnChotDon.setFont(new Font("Times New Roman", Font.BOLD, 17));
-//		btnChotDon.setBounds(570, 225, 150, 40);
-//		btnChotDon.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				if (model.getRowCount() == 0) {
-//		            JOptionPane.showMessageDialog(null, "Bạn chưa chọn món ăn nào.", "Thông báo", JOptionPane.WARNING_MESSAGE);
-//		            return;
-//		        }
-//				
-//				
-//				int tableID = Integer.parseInt(textpane.getText());
-//		        String time = getTimeFromSystem(); 
-//		        //String empID = loginObject.getLoggedInUserID();
-//		        String empID = "171200";
-//		        long totalBill = total;
-//		        Bill_Cache billCache = new Bill_Cache();
-//		        int currentBillID = getCurrentBillID(); 
-//		        boolean success = billCache.addBill(currentBillID, time, totalBill, tableID, empID, 0);
-//		        if (!success) {
-//		            JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//		            return;
-//		        }
-//
-//		        for (int i = 0; i < model.getRowCount(); i++) {
-//		            int itemID = (int) model.getValueAt(i, 0);
-//		            int quantity = (int) model.getValueAt(i, 3);
-//		            int price = (int) model.getValueAt(i, 2)*quantity;
-//		            success = billCache.addOrderDetail(currentBillID, itemID, quantity, price);
-//		            if(isFoodSelected)
-//						try {
-//							Food_Cache.updateQuantity(itemID, quantity);
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//					else
-//						try {
-//							Drink_Cache.updateQuantity(itemID, quantity);
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//		            if (!success) {
-//		                JOptionPane.showMessageDialog(null, "Lỗi khi thêm chi tiết đơn hàng vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//		                return;
-//		            }
-//		        }
-//		      
-//		        JOptionPane.showMessageDialog(null, "Hóa đơn đã được chốt thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//		        model.setRowCount(0);
-//		        total = 0; 
-//		        textPane.setText("0");
-//		    
-//				int k = Integer.parseInt(textpane.getText());
-//				ktbtn[k-1]=false;
-//				button[k-1].setBackground(re);
-//				textpane.setText("");
-//			}
-//		
-//		});
+	
 		JButton btnChotDon = new JButton("Chốt đơn");
 		btnChotDon.setFont(new Font("Times New Roman", Font.BOLD, 17));
 		btnChotDon.setBounds(570, 225, 150, 40);
