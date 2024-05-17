@@ -133,11 +133,4 @@ public class chart extends JFrame implements ActionListener {
         getContentPane().add(panel, BorderLayout.NORTH);
         getContentPane().add(chartPanel, BorderLayout.CENTER);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            chart chart = new chart();
-            chart.setVisible(true);
-        });
-    }
 }

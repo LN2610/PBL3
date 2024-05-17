@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -33,6 +34,10 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
+import com.mysql.jdbc.Messages;
 
 import connectDTB.connect;
 import data_cache.Bill_Cache;
@@ -40,6 +45,7 @@ import data_cache.Drink_Cache;
 import data_cache.Food_Cache;
 import login.dangnhap1;
 import staff.Bill;
+import javax.swing.JTextField;
 
 public class Goimon extends JPanel {
 
@@ -47,20 +53,24 @@ public class Goimon extends JPanel {
 
 	public int kt;
 	public boolean ktbtn[] = new boolean[25];
-	public Button button[] = new Button[25];
-	boolean isFoodSelected;
-	long total = 0;
-	JTextPane textPane;
+	public static Button button[] = new Button[25];
+	private JComboBox cbName; 
+	private int id, price;
+	private long total = 0;
+	JTextPane tpTotal;
+	private JTextField txtFind;
+	private DefaultTableModel model;
+	static Color gr = new Color(0,255,128);
+	static Color re = new Color(220,20,60);
+	static Color ye = new Color(255, 255, 128);
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
 	 */
 	public Goimon() {
+		setBackground(new Color(255, 222, 173));
 		int n = 25;
 		setBounds(0, 0, 1540, 815);
-		Color gr = new Color(0,255,128);
-		Color re = new Color(220,20,60);
-		Color ye = new Color(255, 255, 128);
 		
 		
 		setForeground(Color.BLACK);
@@ -71,6 +81,7 @@ public class Goimon extends JPanel {
 			ktbtn[i] = true;
 		
 		JLabel lblNewLabel = new JLabel("ORDER");
+		lblNewLabel.setForeground(new Color(75, 0, 130));
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -80,139 +91,195 @@ public class Goimon extends JPanel {
 		
 
 		JPanel panel2 = new JPanel();
-		panel2.setBackground(new Color(128, 128, 192));
+		panel2.setBackground(new Color(255, 250, 240));
 		panel2.setBounds(700, 100, 825, 650);	
 		add(panel2);
 		panel2.setLayout(null);
 		panel2.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Chọn loại", "Thức ăn", "Đồ uống"}));
-		comboBox.setBounds(200, 70, 150, 21);
-		panel2.add(comboBox);
+		JComboBox cbClassify = new JComboBox();
+		cbClassify.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		cbClassify.setBorder(BorderFactory.createLineBorder(Color.black));
+		cbClassify.setModel(new DefaultComboBoxModel(new String[] {"Khai vị", "Món chính", "Tráng miệng", "Đồ uống"}));
+		cbClassify.setBounds(200, 70, 150, 21);
+		panel2.add(cbClassify);
+
+		cbName = new JComboBox();
+		cbName.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		cbName.setBorder(BorderFactory.createLineBorder(Color.black));
+		populateComboBox(1);
 		
 		JLabel classify = new JLabel("Loại:");
-		classify.setFont(new Font("Times New Roman", Font.BOLD, 17));
+		classify.setForeground(new Color(75, 0, 130));
+		classify.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		classify.setBounds(100, 70, 45, 20);
 		panel2.add(classify);
 		
 		JLabel Name = new JLabel("Chọn món:");
-		Name.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		Name.setBounds(100, 125, 90, 20);
+		Name.setForeground(new Color(75, 0, 130));
+		Name.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		Name.setBounds(100, 165, 90, 20);
 		panel2.add(Name);
 		
 		JLabel Quantity = new JLabel("Số lượng:");
-		Quantity.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		Quantity.setBounds(100, 180, 70, 20);
+		Quantity.setForeground(new Color(75, 0, 130));
+		Quantity.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		Quantity.setBounds(100, 210, 90, 20);
 		panel2.add(Quantity);
 		
 		JLabel Table = new JLabel("Số bàn:");
-		Table.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		Table.setBounds(100, 235, 70, 20);
+		Table.setForeground(new Color(75, 0, 130));
+		Table.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		Table.setBounds(100, 250, 70, 20);
 		panel2.add(Table);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Chọn món ăn"}));
 		//Đổ dữ liệu lên chọn món khi có loại 
-		comboBox.addActionListener(new ActionListener() {
+		cbClassify.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        JComboBox cb = (JComboBox)e.getSource();
 		        String selectedType = (String)cb.getSelectedItem();
-				// Kiểm tra loại đã chọn và cập nhật biến boolean tương ứng
-		        if (selectedType.equals("Thức ăn")) {
-		            isFoodSelected = true;
-		        } else if (selectedType.equals("Đồ uống")) {
-		            isFoodSelected = false;
-		        }      
-		        // Xóa các mục trong ComboBox chọn món
-		        comboBox_1.removeAllItems();
-		        if (isFoodSelected) {
-		    		try {
-		    			//khởi tạo đối tượng để lấy dữ liệu từ cơ sở dữ liệu 
-		    			Food_Cache foodCache = new Food_Cache();
-		    		} catch (SQLException e1) {
-		    			e1.printStackTrace();
-		    		}
-		    		for (String foodName : Food_Cache.FName) {
-		    		    comboBox_1.addItem(foodName);
-		    		}
-		        } else {
-		    		try {
-		    			Drink_Cache drinkCache = new Drink_Cache();
-		    		} catch (SQLException e2) {
-		    			e2.printStackTrace();
-		    		}
-		    		for (String drinkName : Drink_Cache.Drink_Name) {
-		    		    comboBox_1.addItem(drinkName);
-		    		}
+		        
+		        cbName.removeAllItems();
+		        int classify = 0;
+		        if (selectedType.equals("Khai vị"))
+		        	classify = 1;
+		        else if (selectedType.equals("Món chính")) 
+		        	classify = 2;
+		        else if (selectedType.equals("Tráng miệng")) 
+		                classify = 3;
+		        else if(selectedType.equals("Đồ uống"))
+		        	classify = 4;
+		        populateComboBox(classify);		        
+		    }
+		});
+		cbName.setBounds(200, 165, 150, 21);
+		panel2.add(cbName);
+		
+		JLabel Find = new JLabel("Tìm kiếm:");
+		Find.setForeground(new Color(75, 0, 130));
+		Find.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		Find.setBounds(100, 115, 90, 20);
+		panel2.add(Find);
+		
+		txtFind = new JTextField();
+		txtFind.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		txtFind.setBorder(BorderFactory.createLineBorder(Color.black));
+		txtFind.setBounds(200, 118, 150, 21);
+		panel2.add(txtFind);
+		
+		JButton btnSearch = new JButton("Tìm");
+		btnSearch.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		btnSearch.setBorder(BorderFactory.createLineBorder(Color.black));
+		btnSearch.setForeground(new Color(75, 0, 130));
+		btnSearch.setBounds(370, 117, 85, 21);
+		btnSearch.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	cbName.removeAllItems();
+		        connect connector = new connect();
+		        try (Connection conn = connector.connection;
+		             Statement stmt = conn.createStatement();
+		             ResultSet resultSet = stmt.executeQuery("SELECT Name FROM food_drink WHERE Name LIKE '%" + txtFind.getText() + "%'")) {
+		            while (resultSet.next()) {
+		                cbName.addItem(resultSet.getString("Name"));
+		            }
+		        } catch (SQLException e1) {
+		            e1.printStackTrace();
 		        }
 		    }
 		});
-		comboBox_1.setBounds(200, 125, 150, 21);
-		panel2.add(comboBox_1);
+		panel2.add(btnSearch);
 		
 		JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		spinner.setFont(new Font("Times New Roman", Font.PLAIN, 15));
-		spinner.setBounds(200, 180, 50, 25);
+		spinner.setBorder(BorderFactory.createLineBorder(Color.black));
+		spinner.setBounds(200, 210, 50, 25);
 		panel2.add(spinner);
 		
-		JTextPane textpane = new JTextPane();
-		textpane.setBackground(new Color(255, 255, 255));
-		textpane.setEditable(false);
-		textpane.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		textpane.setBounds(200, 235, 50, 25);
-		panel2.add(textpane);
+		JTextPane tpTable = new JTextPane();
+		tpTable.setBackground(new Color(255, 255, 255));
+		tpTable.setBorder(BorderFactory.createLineBorder(Color.black));
+		tpTable.setEditable(false);
+		tpTable.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		tpTable.setBounds(200, 250, 50, 25);
+		panel2.add(tpTable);
 		
 
 		JTable table = new JTable();
 
-		DefaultTableModel model = new DefaultTableModel();
+		model = new DefaultTableModel();
 		model.addColumn("ID");
 		model.addColumn("Tên món");
 		model.addColumn("Giá (VND)");
 		model.addColumn("Số lượng");
+		model.addColumn("Thành tiền");
 		table.setModel(model);
+		
+		// Lấy đối tượng của cột ID từ model của bảng
+		TableColumnModel columnModel = table.getColumnModel();
+		TableColumn idColumn = columnModel.getColumn(0);
+
+		// Ẩn cột ID
+		columnModel.removeColumn(idColumn);
+
         
         table.setPreferredScrollableViewportSize(new Dimension(600, 400));
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(10, 320, 800, 250);
 		panel2.add(scrollPane);
 		
-		JButton btnChon = new JButton("Chọn món");
-		btnChon.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		btnChon.setBounds(570, 150, 150, 40);
-		btnChon.addActionListener(new ActionListener() {
+		JButton btnDelete = new JButton("Xóa món");
+		btnDelete.setForeground(new Color(75, 0, 130));
+		btnDelete.setBorder(BorderFactory.createLineBorder(Color.black));
+		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnDelete.setBounds(570, 115, 150, 40);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        int selectedRowIndex = table.getSelectedRow();
+		        if (selectedRowIndex != -1) {
+		            
+		            int choice = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa món này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+		            
+		            if (choice == JOptionPane.YES_OPTION) {
+		                DefaultTableModel model = (DefaultTableModel) table.getModel();
+		                int quantity = (int) table.getValueAt(selectedRowIndex, 3);
+		                int price = (int) table.getValueAt(selectedRowIndex, 2); 
+		                total -= price * quantity; 
+		                model.removeRow(selectedRowIndex);
+		                tpTotal.setText(String.valueOf(total));
+		            }
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Vui lòng chọn một món để xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+		        }
+		    }
+		});
+		panel2.add(btnDelete);
+		
+		JButton btnChoose = new JButton("Chọn món");
+		btnChoose.setForeground(new Color(75, 0, 130));
+		btnChoose.setBorder(BorderFactory.createLineBorder(Color.black));
+		btnChoose.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnChoose.setBounds(570, 180, 150, 40);
+		btnChoose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				 String selectedItem = (String) comboBox_1.getSelectedItem(); 
+				 String selectedItem = (String) cbName.getSelectedItem(); 
 			     int quantity = (int) spinner.getValue(); 
 
-			     int id = -1;
-			     int price = -1;
-			     if (isFoodSelected)
-			     {
-			    	 for (int i = 0; i < Food_Cache.FName.size(); i++) {
-				    	 if(Food_Cache.FName.get(i).equals(selectedItem))
-				    	 {
-				    		id = Food_Cache.FID.get(i);
-				    		price = Food_Cache.FPrice.get(i);
-				    		break;
-				    	 }
-				     }
+			     id = -1;
+			     price = -1;
+			     connect connector = new connect();
+			     try (Connection conn = connector.connection;
+			          Statement stmt = conn.createStatement();
+			          ResultSet resultSet = stmt.executeQuery("SELECT ID, Price FROM food_drink WHERE Name = '" + selectedItem + "'")) {
+			         if (resultSet.next()) {
+			             id = resultSet.getInt("ID");
+			             price = resultSet.getInt("Price");
+			         }
+			     } catch (SQLException e1) {
+			         e1.printStackTrace();
 			     }
-			     else {
-			    	 for (int i = 0; i < Drink_Cache.Drink_Name.size(); i++) {
-				    	 if(Drink_Cache.Drink_Name.get(i).equals(selectedItem))
-				    	 {
-				    		id = Drink_Cache.Drink_ID.get(i);
-				    		price = Drink_Cache.Drink_Price.get(i);
-				    		break;
-				    	 }
-				     }
-			     }
+			     
 			     //kiểm tra món ăn đã được chọn trước đó hay chưa
 			     boolean itemExists = false;
 			     for (int i = 0; i < model.getRowCount(); i++) {
@@ -226,28 +293,31 @@ public class Goimon extends JPanel {
 			         JOptionPane.showMessageDialog(null, "Món ăn đã được chọn trước đó. Vui lòng chọn một món khác.", "Thông báo", JOptionPane.WARNING_MESSAGE);
 
 			     } else {
-			         Object[] row = new Object[4];
+			         Object[] row = new Object[5];
 			         row[0] = id; 
 			         row[1] = selectedItem;
 			         row[2] = price; 
 			         row[3] = quantity;
+			         row[4] = quantity*price;
 			         model.addRow(row);
 			         total += price * quantity;
 			     }
-			     textPane.setText(String.valueOf(total));
+			     tpTotal.setText(String.valueOf(total));
 			}
 		});
-		panel2.add(btnChon);
+		panel2.add(btnChoose);
 		
-		JButton btnSua = new JButton("Sửa");
-		btnSua.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		btnSua.setBounds(570, 70, 150, 40);
-		btnSua.addActionListener(new ActionListener() {
+		JButton btnUpdate = new JButton("Thay đổi SL");
+		btnUpdate.setForeground(new Color(75, 0, 130));
+		btnUpdate.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnUpdate.setBorder(BorderFactory.createLineBorder(Color.black));
+		btnUpdate.setBounds(570, 50, 150, 40);
+		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				int selectedRowIndex = table.getSelectedRow();
 				if (selectedRowIndex != -1) {
-				    String selectedFoodName = (String) table.getValueAt(selectedRowIndex, 1);
+				    String selectedFoodName = (String) table.getValueAt(selectedRowIndex, 0);
 				    String input = JOptionPane.showInputDialog(null, "Nhập số lượng mới cho món " + selectedFoodName + ":", "Sửa số lượng", JOptionPane.PLAIN_MESSAGE);
 				    if (input != null && !input.isEmpty()) {
 				        try {
@@ -257,7 +327,8 @@ public class Goimon extends JPanel {
 				            total -= price * oldQuantity;
 				            total += price * newQuantity;
 				            model.setValueAt(newQuantity, selectedRowIndex, 3);
-				            textPane.setText(String.valueOf(total));
+				            model.setValueAt(newQuantity*price, selectedRowIndex, 4);
+				            tpTotal.setText(String.valueOf(total));
 				        } catch (NumberFormatException ex) {
 				            JOptionPane.showMessageDialog(null, "Vui lòng nhập một số nguyên hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
 				        }
@@ -268,12 +339,14 @@ public class Goimon extends JPanel {
 
 			}
 		});
-		panel2.add(btnSua);
+		panel2.add(btnUpdate);
 	
-		JButton btnChotDon = new JButton("Chốt đơn");
-		btnChotDon.setFont(new Font("Times New Roman", Font.BOLD, 17));
-		btnChotDon.setBounds(570, 225, 150, 40);
-		btnChotDon.addActionListener(new ActionListener() {
+		JButton btnConfirm = new JButton("Chốt đơn");
+		btnConfirm.setForeground(new Color(75, 0, 130));
+		btnConfirm.setBorder(BorderFactory.createLineBorder(Color.black));
+		btnConfirm.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		btnConfirm.setBounds(570, 250, 150, 40);
+		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
 				if (model.getRowCount() == 0) {
@@ -281,55 +354,101 @@ public class Goimon extends JPanel {
 		            return;
 		        }
 				
-				int tableID = Integer.parseInt(textpane.getText());
+				String tptableString = "";
+				
+				int tableID = -1;
+				
+				if(tpTable.getText() == "" ) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn bàn trước khi gọi món!", "Lời nhắc", JOptionPane.WARNING_MESSAGE);
+				} else {
+					tptableString = tpTable.getText();
+					tableID =  Integer.parseInt(tptableString);
+				}
+				if(tableID == -1) {
+					return;
+				}
 		        String time = getTimeFromSystem(); 
-		        int empID =  Integer.parseInt(dangnhap1.loggedInUserID);
+		        int empOrder =  Integer.parseInt(dangnhap1.loggedInUserID);
 		        long totalBill = total;
 		        Bill_Cache billCache = new Bill_Cache();
 		        int currentBillID = getCurrentBillID(); 
-		        boolean success = billCache.addBill(currentBillID, time,tableID, empID, totalBill,  0);
-		        if (!success) {
-		            JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		            return;
+		        
+		        int exitingBillID = billCache.getOpenBillIDForTable(tableID);
+		        
+		        //kiểm tra bàn đã có khách ngồi và muốn đặt thêm món 
+		        if(exitingBillID != -1)
+		        {
+		        	for (int i = 0; i < model.getRowCount(); i++) {
+			            int itemID = (int) model.getValueAt(i, 0);
+			            int quantity = (int) model.getValueAt(i, 3);
+			            int price = (int) model.getValueAt(i, 2)*quantity;
+			            
+			            boolean itemExistsInBill = billCache.hasItemInBill(exitingBillID, itemID);
+			            if(itemExistsInBill)
+			            {
+			            	boolean success = billCache.updateOrderDetailQuantity(exitingBillID, itemID, quantity, price);
+			            	if(!success)
+			            	{
+			            		JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật số lương món trong hóa đơn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			            		return;
+			            	}
+			            	
+			            	boolean success1 = billCache.updateBillTotal(exitingBillID);
+			            	if(!success1)
+			            	{
+			            		JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật số tiền trong hóa đơn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			            		return;
+			            	}
+			            }
+			            else {
+							boolean success = billCache.addOrderDetail(exitingBillID, itemID, quantity, price);
+							if(!success)
+			            	{
+			            		JOptionPane.showMessageDialog(null, "Lỗi khi thêm chi tiết đơn hàng vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			            		return;
+			            	}
+							
+							boolean success1 = billCache.updateBillTotal(exitingBillID);
+			            	if(!success1)
+			            	{
+			            		JOptionPane.showMessageDialog(null, "Lỗi khi cập nhật số tiền trong hóa đơn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			            		return;
+			            	}
+						}
+		        	}
 		        }
 
-		        for (int i = 0; i < model.getRowCount(); i++) {
-		            int itemID = (int) model.getValueAt(i, 0);
-		            int quantity = (int) model.getValueAt(i, 3);
-		            int price = (int) model.getValueAt(i, 2)*quantity;
-		            success = billCache.addOrderDetail(currentBillID, itemID, quantity, price);
-		            if(isFoodSelected)
-						try {
-							Food_Cache.updateQuantity(itemID, quantity);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					else
-						try {
-							Drink_Cache.updateQuantity(itemID, quantity);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-		            if (!success) {
-		                JOptionPane.showMessageDialog(null, "Lỗi khi thêm chi tiết đơn hàng vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		                return;
-		            }
+		        else {
+		        	boolean success = billCache.addBill(currentBillID, time, tableID, empOrder, totalBill, 0);
+		        	if(!success)
+		        	{
+		        		JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn vào cơ sở dữ liệu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        		return;
+		        	}
+		        	
+		        	for (int i =0; i<model.getRowCount(); i++)
+		        	{
+		        		int itemID = (int) model.getValueAt(i, 0);
+		        		int quantity = (int) model.getValueAt(i, 3);
+		        		int price = (int) model.getValueAt(i, 2) *quantity;
+		        		boolean success1 = billCache.addOrderDetail(currentBillID, itemID, quantity, price);
+		        		if(!success1)
+		        		{
+		        			JOptionPane.showMessageDialog(null, "Lỗi khi thêm chi tiết hóa đơn", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        			return;
+		        		}
+		        	}
 		        }
-		        connect connector = new connect();
-				Connection conn = connector.connection;
-				Statement stmt = null;
-				try {
-					stmt = conn.createStatement();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		        if (success) {
+		        
+		        if (exitingBillID == -1) {
 		        	  String updateTableQuery = "UPDATE tables SET Status = 1 WHERE Table_ID = " + tableID; 
 		        	  try {
-						stmt.executeUpdate(updateTableQuery);
+		        		  connect connector = new connect();
+		                  Connection conn = connector.connection;
+		                  Statement stmt = conn.createStatement();
+		                  stmt.executeUpdate(updateTableQuery);
+		                  stmt.close();
+		                  conn.close();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -339,34 +458,37 @@ public class Goimon extends JPanel {
 		        JOptionPane.showMessageDialog(null, "Hóa đơn đã được chốt thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 		        model.setRowCount(0);
 		        total = 0; 
-		        textPane.setText("0");
+		        tpTotal.setText("0");
 		    
-				int k = Integer.parseInt(textpane.getText());
+				int k = Integer.parseInt(tpTable.getText());
 				ktbtn[k-1]=false;
 				button[k-1].setBackground(re);
 				
-				textpane.setText("");
+				tpTable.setText("");
 //				Bill bill = new Bill();
 //				
-				Bill.updateTable();
-			}
+				Bill.UpdateDataToComboBox();			}
 		
 		});
-		panel2.add(btnChotDon);
+		panel2.add(btnConfirm);
 		
 		JLabel Tien = new JLabel("Tổng tiền:");
-		Tien.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		Tien.setForeground(new Color(75, 0, 130));
+		Tien.setFont(new Font("Times New Roman", Font.BOLD, 22));
 		Tien.setHorizontalAlignment(SwingConstants.CENTER);
-		Tien.setBounds(183, 600, 100, 25);
+		Tien.setBounds(220, 600, 100, 25);
 		panel2.add(Tien);
 		
-		textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		textPane.setBounds(300, 600, 150, 25);
-		panel2.add(textPane);
+		tpTotal = new JTextPane();
+		tpTotal.setForeground(new Color(75, 0, 130));
+		tpTotal.setEditable(false);
+		tpTotal.setBorder(BorderFactory.createLineBorder(Color.black));
+		tpTotal.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+		tpTotal.setBounds(350, 600, 150, 25);
+		panel2.add(tpTotal);
 		
 		JLabel lblNewLabel_2 = new JLabel("GỌI MÓN");
+		lblNewLabel_2.setForeground(new Color(75, 0, 130));
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		lblNewLabel_2.setBounds(1040, 55, 128, 40);
 		add(lblNewLabel_2);
@@ -374,12 +496,13 @@ public class Goimon extends JPanel {
 		//Panel chọn bàn
 		JPanel panel = new JPanel();
 		panel.setForeground(Color.BLACK);
-		panel.setBackground(new Color(128, 128, 128));
+		panel.setBackground(new Color(255, 250, 240));
 		panel.setBounds(10, 100, 650, 650);
 		add(panel);
 		panel.setLayout(new GridLayout(5, 5, 10, 10));
 		
 		JLabel lblNewLabel_1 = new JLabel("BÀN ĂN");
+		lblNewLabel_1.setForeground(new Color(75, 0, 130));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		lblNewLabel_1.setBounds(273, 58, 128, 40);
@@ -403,11 +526,11 @@ public class Goimon extends JPanel {
 			    int tableId = rs.getInt("Table_ID");
 			    int tableStatus = rs.getInt("Status");
 			    button[i] = new Button(btn[i]);
-			    button[i].setFont(new Font("Times New Roman", Font.BOLD, 20));
+			    button[i].setFont(new Font("Times New Roman", Font.BOLD, 25));
 			    button[i].setBackground(gr);
 			    panel.add(button[i]);
 			    if(tableStatus == 1) 
-			        button[i].setBackground(Color.RED); 
+			        button[i].setBackground(re); 
 			    final int currentIndex = i;
 			    button[i].addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent e) {
@@ -431,7 +554,7 @@ public class Goimon extends JPanel {
 			                });
 			                btn2.addActionListener(new ActionListener() {
 			                    public void actionPerformed(ActionEvent h) {
-			                        textpane.setText(String.valueOf(currentIndex + 1));
+			                        tpTable.setText(String.valueOf(currentIndex + 1));
 			                        button[currentIndex].setBackground(ye);
 			                        for (int j=0; j<n; j++) {
 			                            if (button[j].getBackground() == ye && j != currentIndex) {
@@ -446,8 +569,74 @@ public class Goimon extends JPanel {
 			                panel.add(btn2);
 			                frame.getContentPane().add(panel);
 			                frame.setVisible(true);
-			            } else {
-			                JOptionPane.showMessageDialog(null, "Bàn này đang có khách!!!");
+			            } else if (button[currentIndex].getBackground() == re) {
+			            	boolean kt = true;
+			            	for (int j=0;j<n;j++)
+			            		if (button[j].getBackground() == ye)
+			            		{
+			            			JOptionPane.showMessageDialog(null, "Bàn này đang có khách!!!");
+			            			kt = false;
+			            		}
+			                if (kt) {
+			                	total = 0; 
+			    		        tpTotal.setText("0");
+			                	model.setRowCount(0);
+			                	tpTable.setText("");
+			                	try {
+			                		tpTable.setText(String.valueOf(currentIndex + 1));
+			                		connect connector = new connect();
+			                	    Connection conn = connector.connection;
+			                	    String sql = "SELECT bill_ID FROM bill WHERE Table_ID = ? AND Status = 0";
+			                	    PreparedStatement pstmt = conn.prepareStatement(sql);
+			                	    pstmt.setInt(1, currentIndex + 1);
+			                	    ResultSet resultSet = pstmt.executeQuery();
+
+			                	    // Duyệt qua kết quả truy vấn và lấy thông tin từng món ăn
+			                	    while (resultSet.next()) {
+			                	        int billID = resultSet.getInt("bill_ID");			                	
+				                		JOptionPane.showMessageDialog(null, billID);
+			                	        String sqlItems = "SELECT Item_ID, quantity FROM order_details WHERE bill_id = ?";
+			                	        PreparedStatement pstmtItems = conn.prepareStatement(sqlItems);
+			                	        pstmtItems.setInt(1, billID);
+			                	        ResultSet resultSetItems = pstmtItems.executeQuery();
+
+			                	        // Duyệt qua từng mục trong chi tiết đơn hàng
+			                	        while (resultSetItems.next()) {
+			                	            int itemID = resultSetItems.getInt("Item_ID");
+			                	            int quantity = resultSetItems.getInt("quantity");
+
+			                	            // Thực hiện truy vấn để lấy thông tin món ăn từ cơ sở dữ liệu
+			                	            String sqlFoodDrink = "SELECT Name, price FROM food_drink WHERE ID = ?";
+			                	            PreparedStatement pstmtFoodDrink = conn.prepareStatement(sqlFoodDrink);
+			                	            pstmtFoodDrink.setInt(1, itemID);
+			                	            ResultSet resultSetFoodDrink = pstmtFoodDrink.executeQuery();
+
+			                	            // Nếu có kết quả, thêm thông tin vào bảng hoặc mô hình bảng
+			                	            if (resultSetFoodDrink.next()) {
+			                	                String selectedItem = resultSetFoodDrink.getString("Name");
+			                	                int price = resultSetFoodDrink.getInt("price");
+
+			                	                // Đưa dữ liệu vào bảng hoặc mô hình bảng tại đây
+			                	                Object[] row = new Object[5];
+			                	                row[0] = itemID;
+			                	                row[1] = selectedItem;
+			                	                row[2] = price;
+			                	                row[3] = quantity;
+			                	                row[4] = quantity * price;
+			                	                model.addRow(row);
+			                	                total += price * quantity;
+			                	                tpTotal.setText(String.valueOf(total));
+			                	            }
+			                	        }
+			                	    }
+			                	    
+			            	        rs.close();
+			            	        pstmt.close();
+			            	        conn.close();
+			            	    } catch (Exception ex) {
+			            	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			            	    }
+			                }
 			            }
 			        }
 			    });
@@ -458,15 +647,16 @@ public class Goimon extends JPanel {
 			e1.printStackTrace();
 		}
 		
-		panel2.add(btnChotDon);
+		panel2.add(btnConfirm);
 				
 	}
 	public int getCurrentBillID() {
 	    int currentBillID = 0;
 	    try {
-	        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
+	    	connect connector = new connect();
+			Connection conn = connector.connection;
 	        String sql = "SELECT MAX(bill_ID) FROM bill";
-	        PreparedStatement pstmt = con.prepareStatement(sql);
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	        ResultSet rs = pstmt.executeQuery();
 	        if (rs.next()) {
 	            currentBillID = rs.getInt(1);
@@ -476,7 +666,7 @@ public class Goimon extends JPanel {
 	        }
 	        rs.close();
 	        pstmt.close();
-	        con.close();
+	        conn.close();
 	    } catch (Exception ex) {
 	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	    }
@@ -490,4 +680,41 @@ public class Goimon extends JPanel {
         return formattedTime;
     }
 	
+	private void populateComboBox(int classify) {
+	    connect connector = new connect();
+	    try (Connection conn = connector.connection;
+	         Statement stmt = conn.createStatement();
+	         ResultSet resultSet = stmt.executeQuery("SELECT Name FROM food_drink WHERE classify = '" + classify + "' AND Status = 1")) {
+	        while (resultSet.next()) {
+	            cbName.addItem(resultSet.getString("Name"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void updateTableStatusInUI() {
+	    try {
+	    	connect connector = new connect();
+			Connection conn = connector.connection;
+	        String sql = "SELECT Table_ID, Status FROM tables";
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	        ResultSet rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            int tableId = rs.getInt("Table_ID");
+	            int tableStatus = rs.getInt("Status");
+	            if (tableStatus == 1) {
+	                button[tableId - 1].setBackground(re);
+	            } else {
+	                button[tableId - 1].setBackground(gr);
+	            }
+	        }
+	        rs.close();
+	        pstmt.close();
+	        conn.close();
+	    } catch (Exception ex) {
+	        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+
 }
