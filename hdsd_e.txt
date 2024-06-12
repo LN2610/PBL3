@@ -1,0 +1,34 @@
+1. Giới thiệu chung
+•	Mô tả ứng dụng: ứng dụng “Quản lý gọi món nhà hàng” sẽ giúp bạn quản lý các đơn gọi món, bàn ăn và thực đơn một cách hiệu quả. Hướng dẫn này sẽ giúp bạn hiểu rõ các tính năng và cách sử dụng ứng dụng.
+•	Đối tượng sử dụng: nhân viên.
+2. Đăng nhập 
+1.	Mở ứng dụng.
+2.	Nhập tên đăng nhập và mật khẩu.
+3.	Nhấn "Đăng Nhập" để truy cập vào tài khoản.
+3. Quản lý gọi món
+3.1. Chọn bàn ăn
+1.	Chọn bàn ăn ở danh sách bàn ăn.
+2.	Nhấn xác nhận chọn bàn.
+3.	Chỉ chọn những bàn hiển thị màu xanh (bàn trống). Không được chọn bàn màu đỏ hoặc vàng.
+3.2. Chọn món
+1.	Chọn loại món ăn ở mục “Loại”.
+2.	Chọn món ăn trong mục “Chọn món”.
+3.	Nhập số lượng vào ô “Số lượng”.
+4.	Có thể chọn món ăn theo tìm kiếm ở ô “Tìm kiếm”.
+5.	Nhấn chọn món, món ăn được chọn sẽ hiển thị dưới bảng.
+6.	Nhấn chốt đơn để lưu tất cả các món đã đặt.
+3.3. Xóa món ăn
+1.	Chọn món ăn cần xoá ở bảng bên dưới trang.
+2.	Nhấn "Xóa" và xác nhận.
+4. Quản lý thanh toán
+4.1. Xem chi tiết hoá đơn theo bàn
+1.	Chọn bàn cần xem hoá đơn ở mục “Danh sách các bàn chưa thanh toán”.
+2.	Nhấn “Xem” để hiển thị hoá đơn chi tiết.
+4.2. Cập nhật giảm giá
+1.	Nhập số % giảm giá ở ô “Giảm giá”.
+2.	Nhấn “Xác nhận” để cập nhật tổng tiền mới sau khi giảm giá.
+4.3. In hoá đơn
+1.	Nhấn nút “In” để xuất hoá đơn.
+2.	Hoá đơn được in dưới dạng file pdf.
+5. Hỗ trợ và Liên hệ
+Nếu bạn gặp bất kỳ vấn đề nào trong quá trình sử dụng, vui lòng liên hệ với đội ngũ hỗ trợ khách hàng qua email: support@example.com hoặc số điện thoại: 0395-812-860.

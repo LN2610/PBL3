@@ -1,0 +1,61 @@
+Hướng dẫn sử dụng
+
+1. Giới thiệu chung
+•	Mô tả ứng dụng: ứng dụng “Quản lý gọi món nhà hàng” sẽ giúp bạn quản lý các đơn gọi món, bàn ăn và thực đơn một cách hiệu quả. Hướng dẫn này sẽ giúp bạn hiểu rõ các tính năng và cách sử dụng ứng dụng.
+•	Đối tượng sử dụng: người quản lý.
+2. Đăng nhập 
+1.	Mở ứng dụng.
+2.	Nhập tên đăng nhập và mật khẩu.
+3.	Nhấn "Đăng Nhập" để truy cập vào tài khoản.
+3. Quản lý thực đơn
+3.1. Tìm kiếm món ăn
+1.	Chọn loại món ăn cần ở ô “Danh mục”.
+2.	Nhập tên món ăn cần tìm vào ô “Tìm kiếm”.
+3.	Nhấn biểu tượng kính lúp bên cạnh để thực hiện tìm kiếm, kết quả được hiển thị ở bảng bên phải màn hình.
+3.2. Thêm món ăn
+1.	Nhập tên món ăn vào ô “Tên món”.
+2.	Nhập giá món vào ô “Giá thành”.
+3.	Nhập đơn vị tính của món ăn vào ô “Đơn vị tính”.
+4.	Chọn trạng thái On hay Off cho món ăn ở ô “Trạng thái”.
+5.	Nhấn "Thêm món" để thêm món ăn vào thực đơn.
+3.2. Chỉnh sửa món ăn
+1.	Chọn món ăn cần chỉnh sửa ở bảng “Danh sách món”.
+2.	Chỉnh sửa thông tin món ăn ở các ô Tên món, Giá thành, Đơn vị tính, Trạng thái.
+3.	Thực hiện các thay đổi cần thiết.
+4.	Nhấn “Lưu” để cập nhật thay đổi.
+3.3. Xóa món ăn
+1.	Chọn món ăn cần xoá ở bảng “Danh sách món”.
+2.	Nhấn "Xóa" và xác nhận.
+4. Quản lý nhân viên
+4.1. Tìm kiếm nhân viên
+1.	Nhập tên nhân viên cần tìm vào ô “Tìm kiếm”.
+2.	Nhấn biểu tượng kính lúp bên cạnh để thực hiện tìm kiếm.
+3.	Kết quả tìm kiếm được hiển thị trong bảng bên dưới trang.
+4.2. Thêm nhân viên
+1.	Nhập mã nhân viên vào ô “Mã nhân viên” (mã nhân viên cũng sẽ là tên đăng nhập của nhân viên).
+2.	Nhập tên nhân viên vào ô “Tên nhân viên”
+3.	Nhập số điện thoại nhân viên vào ô “Số điện thoại”.
+4.	Nhập địa chỉ nhân viên vào ô “Địa chỉ”.
+5.	Chọn vai trò cho nhân viên ở ô “Vai trò”.
+6.	Nhập mật khẩu cho tài khoản của nhân viên ở ô “Mật khẩu”. Mật khẩu sau đó sẽ được mã hoá.
+4.2. Chỉnh sửa thông tin nhân viên
+1.	Chọn nhân viên cần chỉnh sửa ở bảng “Danh sách nhân viên”.
+2.	Chỉnh sửa thông tin nhân viên ở các ô Mã nhân viên, Tên nhân viên, Số điện thoại, Địa chỉ, Vai trò, Mật khẩu.
+3.	Thực hiện các thay đổi cần thiết.
+4.	Nhấn “Lưu” để cập nhật thay đổi.
+4.3. Xóa món ăn
+1.	Chọn nhân viên muốn xoá ở bảng “Danh sách nhân viên”.
+2.	Nhấn “Xoá” và xác nhận.
+5. Thống kê
+5.1. Xem thống kê theo doanh thu
+1.	Truy cập vào mục "Thống kê theo doanh thu" từ menu chính.
+2.	Chọn khoảng thời gian bạn muốn xem thống kê.
+3.	Chọn thống kê theo ngày, tháng, năm theo nhu cầu.
+4.	Nhấn “Xem biểu đồ”, biểu đồ doanh thu sẽ hiện bên dưới.
+
+5.1. Xem thống kê theo doanh món
+1.	Truy cập vào mục "Thống kê theo món" từ menu chính.
+2.	Các món ăn được thống kê theo doanh số sẽ được hiển thị dưới dạng bảng.
+
+6. Hỗ trợ và Liên hệ
+Nếu bạn gặp bất kỳ vấn đề nào trong quá trình sử dụng, vui lòng liên hệ với đội ngũ hỗ trợ khách hàng qua email: support@example.com hoặc số điện thoại: 0395-812-860.

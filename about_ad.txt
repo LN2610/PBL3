@@ -1,0 +1,11 @@
+LAVA-RESTAURANT INFORMATION
+Ứng dụng quản lý gọi món ăn trong nhà hàng là một giải pháp công nghệ hỗ trợ hiệu quả cho các nhà hàng, giúp đơn giản hóa quy trình gọi món và thanh toán cho khách hàng. Đây là giao diện dành riêng cho quản lý của nhà hàng trong ứng dụng, giúp quản lý nhà hàng dễ dàng hơn.
+MỘT SỐ TÍNH NĂNG CHÍNH:
+Quản lý thực đơn: Thể hiện thông tin của các món ăn trong thực đơn, bên cạnh đó còn cung cấp các công cụ tìm kiếm, thêm, sửa, xóa món ăn trong thực đơn.
+Quản lý nhân viên: Thông tin của các nhân viên phục vụ trong nhà hàng, bên cạnh đó còn cung cấp các công cụ thêm, sửa, xóa nhân viên.
+Thống kê: Thống kê doanh thu của nhà hàng theo ngày, tháng hoặc năm. Cũng như thống kê lượng món ăn đã được bán để đánh giá món ăn.
+CHÍNH SÁCH BẢO MẬT
+Ứng dụng thu thập thông tin của người quản lý cũng như các nhân viên nhà hàng để phục vụ cho việc quản lý nhà hàng một cách dễ dàng hơn. Chỉ có người quản lý mới có quyền xem về thông tin của chính họ cũng như những người nhân viên trong nhà hàng. Và khi cần thiết thì người quản lý cũng có quyền thêm, chỉnh sửa, hoặc xóa thông tin của chính họ hoặc của những nhân viên nhà hàng. 
+Bảo mật của ứng dụng được thực hiện bởi nhà phát triển Đỗ Long Nghĩa bằng phương pháp mã hóa các mật khẩu cũng như thông tin. Từ đó, việc bảo mật của ứng dụng trở nên an toàn nên người sử dụng không có phải lo lắng về việc bị lộ thông tin cá nhân của mình.
+SỐ PHIÊN BẢN
+5.0.1

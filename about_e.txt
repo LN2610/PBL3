@@ -1,0 +1,22 @@
+Ứng dụng quản lý gọi món ăn trong nhà hàng là một giải pháp công nghệ hỗ trợ hiệu quả cho các nhà hàng, giúp đơn giản hóa quy trình gọi món và thanh toán cho khách hàng. Đây là phần dành riêng cho những nhân viên của nhà hàng trong ứng dụng. Từ đây, nhân viên quản lý đơn hàng hiệu quả sẽ đảm bảo rằng khách hàng luôn có trải nghiệm đặt hàng tốt nhất, dù là đặt hàng trực tiếp tại nhà hàng hay qua đặt hàng trực tuyến.
+Lợi ích cho nhà hàng
+Tăng tốc độ gọi món và thanh toán: Khách hàng có thể tự gọi món và thanh toán trực tiếp trên ứng dụng, giúp giảm thiểu thời gian chờ đợi và tăng hiệu quả phục vụ.
+Giảm thiểu sai sót: Ứng dụng giúp tự động hóa quy trình gọi món và thanh toán, hạn chế sai sót do nhân viên ghi chép thủ công.
+Quản lý hiệu quả: Ứng dụng cung cấp dữ liệu về doanh thu, lượt đặt món, món ăn ưa thích,... giúp chủ nhà hàng phân tích và đưa ra chiến lược kinh doanh hiệu quả.
+Tiết kiệm chi phí: Ứng dụng giúp giảm chi phí in ấn thực đơn, tuyển dụng nhân viên phục vụ.
+Nâng cao trải nghiệm khách hàng: Ứng dụng mang đến trải nghiệm gọi món và thanh toán tiện lợi, nhanh chóng, giúp khách hàng hài lòng hơn.
+Lợi ích cho khách hàng
+Tiện lợi: Khách hàng có thể gọi món và thanh toán mọi lúc mọi nơi trên điện thoại thông minh.
+Nhanh chóng: Ứng dụng giúp rút ngắn thời gian chờ đợi món ăn.
+Chủ động: Khách hàng có thể tự chọn món ăn theo sở thích và nhu cầu.
+Minh bạch: Ứng dụng hiển thị rõ ràng giá cả và thông tin món ăn.
+Thanh toán dễ dàng: Ứng dụng hỗ trợ nhiều phương thức thanh toán tiện lợi.
+MỘT SỐ TÍNH NĂNG CHÍNH
+Nhận đơn hàng: Cho phép nhân viên dễ dàng ghi nhận các yêu cầu của khách hàng.
+Theo dõi đơn hàng: Cung cấp thông tin cập nhật về trạng thái của từng đơn hàng.
+Quản lý thanh toán: Cho phép nhân viên dễ dàng quản lý và thực hiện thanh toán cho những đơn đã được gọi trước đó.
+CHÍNH SÁCH BẢO MẬT
+Ứng dụng thu thập thông tin của người quản lý cũng như các nhân viên nhà hàng để phục vụ cho việc quản lý nhà hàng một cách dễ dàng hơn. Chỉ có người quản lý mới có quyền xem về thông tin của chính họ cũng như những người nhân viên trong nhà hàng. Và khi cần thiết thì người quản lý cũng có quyền thêm, chỉnh sửa, hoặc xóa thông tin của chính họ hoặc của những nhân viên nhà hàng. 
+Bảo mật của ứng dụng được thực hiện bởi nhà phát triển Đỗ Long Nghĩa bằng phương pháp mã hóa các mật khẩu cũng như thông tin. Từ đó, việc bảo mật của ứng dụng trở nên an toàn nên người sử dụng không có phải lo lắng về việc bị lộ thông tin cá nhân của mình.
+SỐ PHIÊN BẢN
+5.0.1
