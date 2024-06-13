@@ -64,9 +64,6 @@ public class Bill extends JPanel implements ActionListener {
     private static int curr;
     private static int status = 0;
     private JTextField txtFind;
-	/**
-	 * Create the panel.
-	 */
     public Bill() {
 	 	
 	 	setBounds(0, 0, 1540, 815);
@@ -356,12 +353,8 @@ public class Bill extends JPanel implements ActionListener {
 	            contentStream.showText("        Xin cảm ơn và hẹn gặp lại quý khách!");
 	            contentStream.endText();			
 	            yPosition -= leading;
-	            
-	            // Đóng content stream
 	            contentStream.close();
-	            // Lưu tài liệu PDF ra file
 	            document.save(billID.toString()+".pdf");
-	            // Đóng tài liệu PDF
 	            document.close();
 	            JOptionPane.showMessageDialog(null, "Xác nhận và in hoá đơn thành công.");
 	        } catch (Exception e) {
@@ -369,53 +362,6 @@ public class Bill extends JPanel implements ActionListener {
 	        }
 	    }
 
-
-	 /*public static void updateTable(String sql) {
-		 	model.setRowCount(0); 
-	        model.setColumnCount(0);
-		    try {
-		        Class.forName("com.mysql.jdbc.Driver");
-		        String url = "jdbc:mysql://localhost:3306/data"; 
-		        Connection con = DriverManager.getConnection(url, "root", "");
-		        //String sql = "SELECT * FROM bill ";
-		        PreparedStatement pstmt = con.prepareStatement(sql);
-		        ResultSet rs = pstmt.executeQuery();
-		        model.setRowCount(0); 
-		        ResultSetMetaData metaData = rs.getMetaData();
-		        int columnCount = metaData.getColumnCount();
-
-		        model.setColumnCount(0);
-
-		        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-		            model.addColumn(metaData.getColumnLabel(columnIndex));
-		        }
-		        for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-		            if (columnIndex == 2) {
-		                table.getColumnModel().getColumn(columnIndex - 1).setPreferredWidth(180);
-		            } else {
-		                table.getColumnModel().getColumn(columnIndex - 1).setPreferredWidth(80);
-		            }
-		        }
-		        
-		        while (rs.next()) {
-		            Object[] row = new Object[columnCount];
-		            for (int i = 1; i <= columnCount; i++) {
-		                row[i - 1] = rs.getObject(i);
-		            }
-		            model.addRow(row);
-		        } 
-		        rs.close();
-		        pstmt.close();
-		        con.close();
-
-		        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		        table.revalidate();
-		        table.repaint();
-
-		    } catch (Exception ex) {
-		        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		    }
-		}*/
 	 public static void updateTable(ResultSet rs) {
 		    try {
 		        ResultSetMetaData metaData = rs.getMetaData();
@@ -455,7 +401,7 @@ public class Bill extends JPanel implements ActionListener {
 	        String[] columnNames = {"Mã bill", "Thời gian", "Mã bàn", "NV tạo đơn", "NV thanh toán", "Tổng tiền",  "Trạng thái", "Món"};
 	        for (int i = 0; i < columnNames.length; i++) {
 	            JLabel label = new JLabel(columnNames[i] + ":");
-	            label.setBounds(200, 10 + 25 * i, 100, 20);
+	            label.setBounds(150, 15 + 25 * i, 100, 20);
 	            panel.add(label);
 	            if(i == columnNames.length - 1) {
 	            	try {
@@ -483,17 +429,17 @@ public class Bill extends JPanel implements ActionListener {
 	                    ex.printStackTrace();
 	                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	                }
-	            	textArea.setBounds(400,10 + 25*i, 200, 50);
+	            	textArea.setBounds(340,15 + 25*i, 200, 100);
 	            	textArea.setBackground(Color.white);
 	            	textArea.setEditable(false);
 					JScrollPane scrollPane = new JScrollPane(textArea);
-					scrollPane.setBounds(400, 10 + 25 * i, 200, 50);
+					scrollPane.setBounds(340, 15 + 25 * i, 200, 100);
 					scrollPane.setEnabled(false);
-					scrollPane.setPreferredSize(new Dimension(200, 100));
+					scrollPane.setPreferredSize(new Dimension(200, 150));
 					panel.add(scrollPane, BorderLayout.CENTER);
 	            } else {
 	            	textFields[i] = new JTextField();
-	            	textFields[i].setBounds(400, 10 + 25 * i, 200, 20);
+	            	textFields[i].setBounds(340, 15 + 25 * i, 200, 20);
 	            	textFields[i].setEditable(false);
 	            	if(i < rowData.length) {
 	            		textFields[i].setText(rowData[i].toString());
@@ -503,16 +449,18 @@ public class Bill extends JPanel implements ActionListener {
 	        }
 	        JTextField discount = new JTextField();
 	        JLabel label1 = new JLabel("Giảm giá(%):");
-	        label1.setBounds(200, 250, 100, 20);
-	        discount.setBounds(400,250,200,20);
+	        label1.setBounds(150, 300, 100, 20);
+	        discount.setBounds(340,300,200,20);
 	        discount.setText("0");
 	        
 	        panel.add(label1);
 	        panel.add(discount);
 	        
-	        btnUpdate = new JButton("<html>Xác nhận và<br>in hoá đơn</html>");
+	        btnUpdate = new JButton("Xác nhận và in hoá đơn");
 	        btnUpdate.setHorizontalAlignment(SwingConstants.CENTER);
-	        btnUpdate.setBounds(370, 300, 120, 60);
+	        btnUpdate.setBorder(new RoundedBorder(20));
+	        btnUpdate.setBackground(new Color(255, 255, 255));
+	        btnUpdate.setBounds(355, 330, 180, 30);
 	        panel.add(btnUpdate);       
 	        btnUpdate.setEnabled(true);
 	        btnUpdate.addActionListener(new ActionListener() {
@@ -554,7 +502,6 @@ public class Bill extends JPanel implements ActionListener {
 	  		        		  stmt.executeUpdate(updateTableQuery);
 	  		        		  Goimon.updateTableStatusInUI();
 	  		        	  } catch (SQLException e1) {
-	  						// TODO Auto-generated catch block
 	  						e1.printStackTrace();
 	  		        	  }
 	                    } else {
@@ -606,11 +553,9 @@ public class Bill extends JPanel implements ActionListener {
 						PreparedStatement pstmt1 = con.prepareStatement(query);
 						pstmt1.setString(1, billID.toString());
 						ResultSet rs1 = pstmt1.executeQuery();
-						// Đếm số lượng hàng trong ResultSet
-						rs1.last(); // Di chuyển tới hàng cuối cùng
-						int numRows = rs1.getRow(); // Lấy chỉ số hàng hiện tại
-						rs1.beforeFirst(); // Di chuyển về hàng đầu tiên
-						// Khởi tạo mảng với số phần tử là số hàng trong ResultSet
+						rs1.last(); 
+						int numRows = rs1.getRow(); 
+						rs1.beforeFirst();
 						name = new String[numRows];
 						quantity = new String[numRows];
 						price = new String[numRows];
