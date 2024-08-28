@@ -465,23 +465,25 @@ public class Bill extends JPanel implements ActionListener {
 	        btnUpdate.setEnabled(true);
 	        btnUpdate.addActionListener(new ActionListener() {
 	            @Override
-	            public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 	            	
 	            	try { 
 	            	int dc = Integer.parseInt(discount.getText());
-	            	
+	            	int totalBill = Integer.parseInt(textFields[5].getText());
+
 	                if (dc < 0 || dc > 100) {
 	                   JOptionPane.showMessageDialog(null, "Giá trị không hợp lệ. Hãy nhập lại.");
-	                }
-	                else { 
+	                   discount.setText("0");
+	                } else { 
 	                    try {
+	                    dc = Integer.parseInt(discount.getText());
 	                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/data", "root", "");
 	                    String sqlBill = "UPDATE bill SET Status = ?, Total = ? WHERE Bill_ID=?";
 	                    PreparedStatement pstmtBill = con.prepareStatement(sqlBill);
 	                    pstmtBill.setBoolean(1, true);
-	                    discountPrice = (int) ((Integer.parseInt(textFields[5].getText()))*(dc/100));
-	                    finalPrice = (int) ((Integer.parseInt(textFields[5].getText()) - discountPrice));
-	                    
+	                    discountPrice = totalBill * dc / 100;
+	                    finalPrice = totalBill - discountPrice;
+	                
 						pstmtBill.setInt(2, finalPrice);
 						
 						pstmtBill.setInt(3, Integer.parseInt(textFields[0].getText())); 
@@ -501,6 +503,8 @@ public class Bill extends JPanel implements ActionListener {
 	  		        		  stmt = conn.createStatement();
 	  		        		  stmt.executeUpdate(updateTableQuery);
 	  		        		  Goimon.updateTableStatusInUI();
+	  		        		  conn.close();
+	  		        		  stmt.close();
 	  		        	  } catch (SQLException e1) {
 	  						e1.printStackTrace();
 	  		        	  }
@@ -537,7 +541,7 @@ public class Bill extends JPanel implements ActionListener {
 								rowData[i] = rs.getObject(i + 1);
 							}
 							billID = rowData[0];
-							Total = rs.getObject(6);
+							Total = totalBill;
 							rowData[3] = getName((int)rowData[3]);
 							rowData[4] = getName((int) rowData[4]);
 							Component[] components = getComponents();
@@ -583,9 +587,9 @@ public class Bill extends JPanel implements ActionListener {
 	            }
 	            } catch (NumberFormatException er) {
 	            	JOptionPane.showMessageDialog(null, "Giá trị không hợp lệ. Hãy nhập lại.");
+	            	discount.setText("");
 	            }
-	            }
-	        });
+	            }	        });
 	        revalidate();
 	        repaint();
 	    }

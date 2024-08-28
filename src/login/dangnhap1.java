@@ -34,18 +34,13 @@ public class dangnhap1 extends JFrame implements ActionListener {
     private JPasswordField password;
     private boolean isAdmin = true;
     public static String loggedInUserID = "101200";
-    /**
-     * Create the application.
-     */
 
     public dangnhap1() {
        
         initialize();
         frame.setVisible(true);
     }
-    /**
-     * Initialize the contents of the frame.
-     */
+
     private void initialize() {
         frame = new JFrame();
         

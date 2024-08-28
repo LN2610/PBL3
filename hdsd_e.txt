@@ -1,5 +1,6 @@
 1. Giới thiệu chung
-•	Mô tả ứng dụng: ứng dụng “Quản lý gọi món nhà hàng” sẽ giúp bạn quản lý các đơn gọi món, bàn ăn và thực đơn một cách hiệu quả. Hướng dẫn này sẽ giúp bạn hiểu rõ các tính năng và cách sử dụng ứng dụng.
+•	Mô tả ứng dụng: ứng dụng “Quản lý gọi món nhà hàng” sẽ giúp bạn quản lý các đơn gọi món, bàn ăn và thực đơn một cách hiệu quả.
+Hướng dẫn này sẽ giúp bạn hiểu rõ các tính năng và cách sử dụng ứng dụng.
 •	Đối tượng sử dụng: nhân viên.
 2. Đăng nhập 
 1.	Mở ứng dụng.
@@ -31,4 +32,5 @@
 1.	Nhấn nút “In” để xuất hoá đơn.
 2.	Hoá đơn được in dưới dạng file pdf.
 5. Hỗ trợ và Liên hệ
-Nếu bạn gặp bất kỳ vấn đề nào trong quá trình sử dụng, vui lòng liên hệ với đội ngũ hỗ trợ khách hàng qua email: support@example.com hoặc số điện thoại: 0395-812-860.
+Nếu bạn gặp bất kỳ vấn đề nào trong quá trình sử dụng, vui lòng liên hệ với đội ngũ hỗ trợ khách hàng qua email: support@example.com 
+hoặc số điện thoại: 0395-812-860.

@@ -70,8 +70,8 @@ public class Goimon extends JPanel {
 	static Color re = new Color(220,20,60);
 	static Color ye = new Color(255, 255, 128);
 	private int billID = -1;
-	private JTextField txtGia;
-	private JTextField txtDonVi;
+	private JTextField  txtGia = new JTextField("0");
+	private JTextField txtDonVi = new JTextField();
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -235,6 +235,7 @@ public class Goimon extends JPanel {
 		tpTable.setBounds(212, 275, 50, 25);
 		panel2.add(tpTable);
 		
+		
 
 		JTable table = new JTable();
 
@@ -321,6 +322,9 @@ public class Goimon extends JPanel {
 			{
 				 String selectedItem = (String) cbName.getSelectedItem(); 
 			     int quantity = (int) spinner.getValue(); 
+			     price = Integer.parseInt(txtGia.getText());
+			     donVi = txtDonVi.getText();
+			     id = 1;
 			     int i = 0;
 			     
 			     //kiểm tra món ăn đã được chọn trước đó hay chưa
@@ -333,23 +337,33 @@ public class Goimon extends JPanel {
 			         }
 			     }
 			     if (itemExists) {
-					    String input = JOptionPane.showInputDialog(null, selectedItem + " đã được chọn với số lượng " + (int) model.getValueAt(i, 3) + "!\nBạn muốn thay đổi số lượng thành: ", "Sửa số lượng", JOptionPane.QUESTION_MESSAGE);
-					    if (input != null && !input.isEmpty()) {
-					        try {
-					            int oldQuantity = (int) model.getValueAt(i, 3);
-					            int price = (int) model.getValueAt(i, 2);
-					            int newQuantity = Integer.parseInt(input);
-					            total -= price * oldQuantity;
-					            total += price * newQuantity;
-					            model.setValueAt(newQuantity, i, 3);
-					            model.setValueAt(newQuantity*price, i, 5);
-					            tpTotal.setText(String.valueOf(total));
-					        } catch (NumberFormatException ex) {
-					            JOptionPane.showMessageDialog(null, "Vui lòng nhập một số nguyên hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-					        }
-					    }
+			    	    boolean isValidQuantity = false;
+			    	    while (!isValidQuantity) {
+			    	        String input = JOptionPane.showInputDialog(null, selectedItem + " đã được chọn với số lượng " + (int) model.getValueAt(i, 3) + "!\nBạn muốn thay đổi số lượng thành: ", "Sửa số lượng", JOptionPane.QUESTION_MESSAGE);
+			    	        if (input != null && !input.isEmpty()) {
+			    	            try {
+			    	                int oldQuantity = (int) model.getValueAt(i, 3);
+			    	                int price = (int) model.getValueAt(i, 2);
+			    	                int newQuantity = Integer.parseInt(input);
+			    	                if (newQuantity > 0) {
+			    	                    total -= price * oldQuantity;
+			    	                    total += price * newQuantity;
+			    	                    model.setValueAt(newQuantity, i, 3);
+			    	                    model.setValueAt(newQuantity * price, i, 5);
+			    	                    tpTotal.setText(String.valueOf(total));
+			    	                    isValidQuantity = true; 
+			    	                } else {
+			    	                    JOptionPane.showMessageDialog(null, "Vui lòng nhập số lượng lớn hơn 0.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			    	                }
+			    	            } catch (NumberFormatException ex) {
+			    	                JOptionPane.showMessageDialog(null, "Vui lòng nhập một số nguyên hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			    	            }
+			    	        } else {
+			    	            break; 
+			    	        }
+			    	    }
 			    	}
-			     
+
 			     else {
 			         Object[] row = new Object[6];
 			         row[0] = id; 
@@ -615,6 +629,7 @@ public class Goimon extends JPanel {
 			                });
 			                btn2.addActionListener(new ActionListener() {
 			                    public void actionPerformed(ActionEvent h) {
+			                    	model.setRowCount(0);
 			                        tpTable.setText(String.valueOf(currentIndex + 1));
 			                        button[currentIndex].setBackground(ye);
 			                        for (int j=0; j<n; j++) {
@@ -722,16 +737,18 @@ public class Goimon extends JPanel {
 		lblnGivnd.setBounds(77, 180, 126, 20);
 		panel2.add(lblnGivnd);
 		
-		txtGia = new JTextField();
 		txtGia.setForeground(new Color(75, 0, 130));
 		txtGia.setBackground(new Color(255, 255, 255));
 		txtGia.setEditable(false);
+		
+		
+	     
 		txtGia.setFont(new Font("Times New Roman", Font.PLAIN, 17));
 		txtGia.setBorder(new LineBorder(new Color(169, 169, 169), 1, true));
 		txtGia.setBounds(212, 177, 198, 25);
 		panel2.add(txtGia);
 		
-		txtDonVi = new JTextField();
+		
 		txtDonVi.setEditable(false);
 		txtDonVi.setBorder(new LineBorder(new Color(169, 169, 169)));
 		txtDonVi.setForeground(new Color(75, 0, 130));
@@ -775,7 +792,13 @@ public class Goimon extends JPanel {
 	    connect connector = new connect();
 	    try (Connection conn = connector.connection;
 	         Statement stmt = conn.createStatement();
-	         ResultSet resultSet = stmt.executeQuery("SELECT Name FROM food_drink WHERE classify = '" + classify + "' AND Status = 1")) {
+	         ResultSet resultSet = stmt.executeQuery("SELECT Name, Price, DonVi FROM food_drink WHERE classify = '" + classify + "' AND Status = 1")) {
+	    	if(resultSet.first()) {
+	    		int GIA = resultSet.getInt("Price");
+	    		txtGia.setText(Integer.toString(GIA));
+	    		txtDonVi.setText(resultSet.getString("DonVi"));
+	            cbName.addItem(resultSet.getString("Name"));
+	    	}
 	        while (resultSet.next()) {
 	            cbName.addItem(resultSet.getString("Name"));
 	        }

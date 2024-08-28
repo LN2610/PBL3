@@ -20,5 +20,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/nghia/Downloads/pdfbox-app-3.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nghia/Downloads/mysql-connector-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

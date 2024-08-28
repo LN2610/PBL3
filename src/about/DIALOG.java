@@ -22,6 +22,8 @@ public class DIALOG extends JDialog {
         contentPanel.setLayout(new BorderLayout());
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         JTextArea textArea = new JTextArea();
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPanel.add(scrollPane, BorderLayout.CENTER);

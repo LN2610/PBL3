@@ -15,6 +15,7 @@ import connectDTB.connect;
 import data_cache.Drink_Cache;
 import data_cache.Employee_Cache;
 import data_cache.Food_Cache;
+import security.Crypt;
 
 public class Chuc_Nang {
 	private static connect conn = new connect();
@@ -37,7 +38,13 @@ public class Chuc_Nang {
 			rowData[2] = resultSet.getString("Phone");
 			rowData[3] = resultSet.getString("Address");
 			rowData[4] = resultSet.getString("Position");
-			rowData[4] = resultSet.getString("Password");
+			String pass = "";
+			try {
+				pass = Crypt.decrypt(resultSet.getString("Password"));
+			} catch (Exception e){
+				
+			}
+			rowData[5] = pass;
 			
 			employee.model.addRow(rowData);
 		}

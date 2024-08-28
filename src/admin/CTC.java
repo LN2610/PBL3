@@ -117,6 +117,7 @@ public class CTC extends JFrame implements ActionListener {
          mnNewMenu.add(mntmDoanhthu);
          
          JMenuItem mntmXuatThongKe = new JMenuItem("Món ăn");
+         mntmXuatThongKe.setIcon(new ImageIcon(CTC.class.getResource("/image/Jamespeng-Cuisine-Pork-Chop-Set.24.png")));
          mntmXuatThongKe.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		if( frame.getContentPane().getComponent(0) != seller) {
@@ -131,6 +132,7 @@ public class CTC extends JFrame implements ActionListener {
          menuBar.add(mnTuyChon);
          
          JMenuItem mntmThoat = new JMenuItem("Thoát");
+         mntmThoat.setIcon(new ImageIcon(CTC.class.getResource("/image/Oxygen-Icons.org-Oxygen-Actions-edit-delete.24.png")));
          mntmThoat.addActionListener(new ActionListener() {
          	public void actionPerformed(ActionEvent e) {
          		System.exit(0);
@@ -210,7 +212,7 @@ public class CTC extends JFrame implements ActionListener {
          tbFood.setColumnSelectionAllowed(true);
          tbFood.setFillsViewportHeight(true);
          tbFood.setBackground(Color.WHITE);
-         tbFood.setBounds(800, 50, 600,400);
+         tbFood.setBounds(800, 50, 600,320);
          
          tbFood.getColumnModel().getColumn(0).setPreferredWidth(30);
          tbFood.getColumnModel().getColumn(1).setPreferredWidth(250);

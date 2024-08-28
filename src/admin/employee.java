@@ -22,6 +22,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import data_cache.Employee_Cache;
+import font.RoundedBorder;
 import security.Crypt;
 
 import javax.swing.JTextField;
@@ -29,6 +30,9 @@ import java.awt.GridLayout;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
+
+import org.bouncycastle.jcajce.spec.KTSParameterSpec;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -137,7 +141,7 @@ public  class employee extends JPanel {
 		panel_1_1_1.add(lblaCh);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(176, 14, 246, 23);
+		textField_3.setBounds(152, 14, 270, 23);
 		textField_3.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_3.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		textField_3.setColumns(20);
@@ -147,14 +151,16 @@ public  class employee extends JPanel {
 		panel_1_1_2.setBackground(new Color(255, 222, 173));
 		panel_1_1_2.setBounds(1023, 314, 432, 48);
 		panel_3.add(panel_1_1_2);
-		panel_1_1_2.setLayout(new FlowLayout(FlowLayout.CENTER, 25, 10));
+		panel_1_1_2.setLayout(null);
 		
 		JLabel lblNewPassword = new JLabel("Mật khẩu");
+		lblNewPassword.setBounds(35, 10, 90, 26);
 		lblNewPassword.setForeground(new Color(128, 128, 128));
 		lblNewPassword.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		panel_1_1_2.add(lblNewPassword);
 		
 		txtPass = new JTextField();
+		txtPass.setBounds(152, 14, 270, 23);
 		txtPass.setHorizontalAlignment(SwingConstants.CENTER);
 		txtPass.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		txtPass.setColumns(20);
@@ -167,31 +173,50 @@ public  class employee extends JPanel {
 		panel_1_1_3.setLayout(null);
 		
 		JLabel lblVaiTr = new JLabel("Vai trò");
-		lblVaiTr.setForeground(new Color(128, 128, 128));
 		lblVaiTr.setBounds(30, 8, 63, 26);
+		lblVaiTr.setForeground(new Color(128, 128, 128));
 		lblVaiTr.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 22));
 		panel_1_1_3.add(lblVaiTr);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(171, 11, 89, 24);
+		comboBox.setBounds(152, 11, 113, 24);
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Quản lý", "Nhân viên"}));
 		comboBox.setFont(new Font("Times New Roman", Font.ITALIC, 15));
 		panel_1_1_3.add(comboBox);
 		
 		JButton btnNewButton = new JButton("Thêm mới");
+		btnNewButton.setBackground(new Color(255, 255, 255));
+		btnNewButton.setBorder(new RoundedBorder(20));
 		btnNewButton.setForeground(new Color(128, 128, 128));
 		btnNewButton.setIcon(new ImageIcon(employee.class.getResource("/image/Hopstarter-Button-Button-Add.16.png")));
-		btnNewButton.setBounds(106, 262, 161, 39);
+		btnNewButton.setBounds(90, 262, 177, 39);
 		panel_3.add(btnNewButton);
 		btnNewButton.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		
 		btnNewButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        try {
-		            
+		            Boolean kiemtraBoolean = true;
 		            String empID = txtMa.getText();
 		            String empName = textField_1.getText();
 		            String empPhone = textField_2.getText();
+		            try {
+		            	if(empID.length() > 6) {
+		            		JOptionPane.showMessageDialog(null, "Mã nhân viên phải ít hơn 7 ký tự!");
+		            		kiemtraBoolean = false;
+		            	}
+		            	int x = Integer.parseInt(empID);
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Mã nhân viên phải là số nguyên!");
+						kiemtraBoolean =false;
+					}
+		            try {
+		            	int x = Integer.parseInt(empPhone);
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ!");
+						kiemtraBoolean =false;
+						
+					}
 		            String empAddress = textField_3.getText();
 		            //String tempString = comboBox.getSelectedItem().toString();
 		            String empPosition = (comboBox.getSelectedIndex() == 0) ? "Admin" : "Employee";
@@ -222,14 +247,16 @@ public  class employee extends JPanel {
 		                    
 //		                    Object[] newRow = {empID, empName, empPhone, empAddress, empPosition, empPassword};
 //		                    Set_TableModel(newRow); 
+		                	if(kiemtraBoolean) {
+		                		E_CN.insertData(empID, empName, empPhone, empAddress, empPosition, empPassword);
+			                	Show_Drink();
+			                    txtMa.setText("");
+			                    textField_1.setText("");
+			                    textField_2.setText("");
+			                    textField_3.setText("");
+			                    txtPass.setText("");
+		                	}
 		                	
-		                	E_CN.insertData(empID, empName, empPhone, empAddress, empPosition, empPassword);
-		                	Show_Drink();
-		                    txtMa.setText("");
-		                    textField_1.setText("");
-		                    textField_2.setText("");
-		                    textField_3.setText("");
-		                    txtPass.setText("");
 		                }
 		            }
 		        } catch (Exception ex) {
@@ -239,7 +266,9 @@ public  class employee extends JPanel {
 		});
 		
 		JButton btnXa = new JButton("Xóa nhân viên");
+		btnXa.setBackground(new Color(255, 255, 255));
 		btnXa.setForeground(new Color(128, 128, 128));
+		btnXa.setBorder(new RoundedBorder(20));
 		btnXa.setIcon(new ImageIcon(employee.class.getResource("/image/Hopstarter-Button-Button-Delete.16.png")));
 		btnXa.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -260,12 +289,14 @@ public  class employee extends JPanel {
 		    }
 		});
 
-		btnXa.setBounds(106, 314, 161, 39);
+		btnXa.setBounds(90, 314, 177, 39);
 		panel_3.add(btnXa);
 		btnXa.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		
 		JButton btnSa = new JButton("Sửa thông tin");
+		btnSa.setBackground(new Color(255, 255, 255));
 		btnSa.setForeground(new Color(128, 128, 128));
+		btnSa.setBorder(new RoundedBorder(20));
 		btnSa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 try {
@@ -323,7 +354,7 @@ try {
 			}
 		});
 		btnSa.setIcon(new ImageIcon(employee.class.getResource("/image/Oxygen-Icons.org-Oxygen-Actions-document-edit.16.png")));
-		btnSa.setBounds(318, 262, 145, 39);
+		btnSa.setBounds(318, 262, 161, 39);
 		panel_3.add(btnSa);
 		btnSa.setFont(new Font("Times New Roman", Font.BOLD, 15));
 		new Employee_Cache();
@@ -369,7 +400,9 @@ try {
 		});
 
 		JButton btntLi = new JButton("Đặt lại");
+		btntLi.setBackground(new Color(255, 255, 255));
 		btntLi.setForeground(new Color(128, 128, 128));
+		btntLi.setBorder(new RoundedBorder(20));
 		btntLi.setIcon(new ImageIcon(employee.class.getResource("/image/Aniket-Suvarna-Box-Regular-Bx-reset.16.png")));
 		btntLi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -385,7 +418,7 @@ try {
 			}
 		});
 		btntLi.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		btntLi.setBounds(318, 314, 145, 39);
+		btntLi.setBounds(318, 314, 161, 39);
 		panel_3.add(btntLi);
 		
 		JPanel panel_4 = new JPanel();
@@ -417,7 +450,8 @@ try {
 		
 		JButton btnNewButton_1 = new JButton("Tìm ");
 		btnNewButton_1.setForeground(new Color(128, 128, 128));
-		btnNewButton_1.setBounds(419, 197, 63, 27);
+		btnNewButton_1.setBorder(new RoundedBorder(20));
+		btnNewButton_1.setBounds(419, 197, 86, 27);
 		panel_3.add(btnNewButton_1);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -430,6 +464,17 @@ try {
 			}
 		});
 		btnNewButton_1.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		
+		JLabel lblNewLabel_5 = new JLabel("Quản lý");
+		lblNewLabel_5.setForeground(Color.GRAY);
+		lblNewLabel_5.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 32));
+		lblNewLabel_5.setBounds(1401, 20, 119, 53);
+		panel_3.add(lblNewLabel_5);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(employee.class.getResource("/image/Hopstarter-Sleek-Xp-Basic-Preppy.48.png")));
+		lblNewLabel_2.setBounds(1350, 10, 48, 67);
+		panel_3.add(lblNewLabel_2);
 		
 	}
 	public static void Set_TableModel(Object[] data) {
