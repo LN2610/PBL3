@@ -16,29 +16,23 @@ Trong bối cảnh công nghệ ngày càng phát triển, việc ứng dụng c
 
 ## Phân tích và thiết kế ứng dụng
 - Use-case Diagram
-///
+  ![Use-case](./images_for_introduce/use_case.drawio.png)
 - Database Diagram
-///
-## Phân tích và thiết kế ứng dụng
-- Use-case Diagram
-///
-- Database Diagram
-///
+  ![Data](./images_for_introduce/data.png)
+
 ## Giao diện chính
-
 - Đăng nhập
-///
-
+    ![Login](./images_for_introduce/login.png)
 - Gọi món
-///
-
+    ![Order](./images_for_introduce/order.png)
 - Quản lý thực đơn
-///
-
+    ![menu](./images_for_introduce/menu.png)
 - Quản lý nhân viên
-///
-
+    ![Staff Management](./images_for_introduce/em.png)
 - Thống kê
+    ![Statistics](./images_for_introduce/statistic.png)
+- Hóa đơn
+    ![Bill](./images_for_introduce/bill.png)
 ## Hướng phát triển
 
 Ta thấy ứng dụng này đã có khá nhiều chức năng phục vụ cho việc quản lý gọi món nhà hàng. Tuy nhiên vẫn còn nhiều điều cần cải thiện nếu muốn áp dụng nó vào thực tế. Cụ thể là:
